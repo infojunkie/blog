@@ -5,6 +5,8 @@ date: 2018-01-05
 ---
 I submitted the following essay to UBC as the introduction to a Master's program letter of intent, so please forgive the self-engrossed tone. Haven't heard back yet, hoping for good news! :crossed_fingers: :joy:
 
+`<essay>`
+
 There is a paradigm shift afoot in the software industry. The expectations of software users are rising in sophistication, and accordingly must the role of the software programmer change. Specifically, users are now expecting to make large-scale decisions based on an increasing, real-time inflow of data. They also expect machines to make lower-level, routine decisions on their behalf, with little or no personal involvement.
 
 To respond to these demands, the programmer can no longer simply supply hand-crafted data analysis and processing algorithms that are tailored to a specific problem or a specific request. The turnaround time to hand-craft algorithms is prohibitive compared to the pace, scope and volume of data analysis demand. To meet this new demand, the programmer must become proficient in a new class of computing tools: machine learning algorithms.
