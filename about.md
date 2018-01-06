@@ -10,7 +10,7 @@ My name is Karim Ratib. This is my semi-professional blog as a software "craftsm
 
 I'm also a lifelong music fan, learner and player. This will often show up on this blog as well.
 
-I lead a fantastic team of programmers at a [small, great organization called Meedan](https://meedan.com){:target="_blank"}.
+I lead a fantastic team of programmers at a [great, small organization called Meedan](https://meedan.com){:target="_blank"}.
 We work on collaborative annotation systems for social media, applied to news verification and translation.
 [All our code is open sourced](https://github.com/meedan){:target="_blank"}.
 
