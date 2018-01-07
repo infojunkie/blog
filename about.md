@@ -11,7 +11,7 @@ My name is Karim Ratib. This is my semi-professional blog as a software "craftsm
 I'm also a lifelong music fan, learner and player. This will often show up on this blog as well.
 
 I lead a fantastic team of programmers at a [great, small organization called Meedan](https://meedan.com){:target="_blank"}.
-We work on collaborative annotation systems for social media, applied to news verification and translation.
+We work on collaborative annotation systems for social media, applied to crowsourced translation (notably for refugee support) and news verification.
 [All our code is open sourced](https://github.com/meedan){:target="_blank"}.
 
 Before Meedan, I used to offer my [services as a Drupal programmer](http://thereisamoduleforthat.com){:target="_blank"}. It was fun for many years.
