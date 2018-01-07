@@ -28,6 +28,7 @@ gems:
   - jekyll-feed
   - jemoji
   - jekyll-font-awesome-sass
+  - jekyll-seo-tag
 exclude:
   - Gemfile
   - Gemfile.lock

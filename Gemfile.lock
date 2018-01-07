@@ -38,6 +38,8 @@ GEM
       jekyll (>= 2.5, < 4.0)
     jekyll-sass-converter (1.5.1)
       sass (~> 3.4)
+    jekyll-seo-tag (2.0.0)
+      jekyll (~> 3.1)
     jekyll-watch (1.5.1)
       listen (~> 3.0)
     jekyll_oembed (0.0.3)
@@ -87,6 +89,7 @@ DEPENDENCIES
   jekyll (= 3.3.1)
   jekyll-feed (~> 0.6)
   jekyll-font-awesome-sass
+  jekyll-seo-tag
   jekyll_oembed
   jemoji
   minima (~> 2.0)
