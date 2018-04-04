@@ -20,11 +20,11 @@ Here's what I did to load `mediaserver` onto my laptop:
 
 ### Get the database dump
 - `ssh rokanan` to get into the NAS (I like Ursula Le Guin)
-- `sudo -s` to become root in your own home
+- `sudo -s` to become root in my own home
 - `su - postgres` to become the Postgres user
 - `pg_dump mediaserver | bzip2 > mediaserver.sql.bz2` to dump the desired database
 - `exit` to return to root
-- `mv /var/services/pgsql/mediaserver.sql.bz2 .` to move the file into your home
+- `mv /var/services/pgsql/mediaserver.sql.bz2 .` to move the file to my home
 - `chown your-username:users mediaserver.sql.bz2` to make the file accessible
 - exit the NAS
 - `scp rokanan:~/mediaserver.sql.bz2 .` to get the file locally

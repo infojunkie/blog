@@ -17,7 +17,6 @@ title: Information will be free!
 author: Karim Ratib
 email: karim.ratib@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  Wherein the blogger exposes his ignorance about many subjects.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://blog.karimratib.me" # the base hostname & protocol for your site, e.g. http://example.com
 
