@@ -14,13 +14,13 @@ However, I can go a little further to scratch my own itch. Today, I decided to s
 workings of the Synology media server. I hypothesized that there must be some kind of database that
 allows the various apps (audio, video, etc.) to search and locate the media on the NAS. A little googling
 led me to a [Stack Exchange post](https://unix.stackexchange.com/questions/377713/postgresql-installation-on-a-synology-diskstation-ds216j-pgadminiii){:target="_blank"}
-that showed a PostgreSQL containing names such as `mediaserver`, `photo`, `video_metadata`. Bingo!
+that showed a PostgreSQL server containing databases such as `mediaserver`, `photo`, `video_metadata`. Bingo!
 
 Here's what I did to load `mediaserver` onto my laptop:
 
 ### Get the database dump
 - `ssh rokanan` to get into the NAS (I like Ursula Le Guin)
-- `sudo -s` to become root in my own home
+- `sudo su -` to become root
 - `su - postgres` to become the Postgres user
 - `pg_dump mediaserver | bzip2 > mediaserver.sql.bz2` to dump the desired database
 - `exit` to return to root
