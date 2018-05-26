@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Deleting stale tracks from the media database of Synology NAS
+title: Deleting stale tracks from the Synology NAS media database
 date: 2018-05-09
 ---
 [In a previous post]({% post_url 2018-04-02-synology-mediaserver %}), I've been exploring the
