@@ -5,33 +5,33 @@ date: 2018-01-09
 ---
 YouTube is a great way to quickly disseminate obscure, long-tail music albums that carry cultural significance. As long as you remain under the radar of our friends at the music labels, of course :wink:
 
-Here's a recipe to prepare audio files for YouTube upload. The video is a looping slideshow of the images contained in the album's artwork. Here's a [couple](https://www.youtube.com/watch?v=qjlDT819Q3s){:target="_blank"} of [examples](https://www.youtube.com/watch?v=Lii7NCULPBA){:target="_blank"} of this recipe's output.
+Here's a recipe to prepare audio files for YouTube upload. The video is a looping slideshow of the images contained in the album's artwork. Here's a [couple](https://www.youtube.com/watch?v=qjlDT819Q3s) of [examples](https://www.youtube.com/watch?v=Lii7NCULPBA) of this recipe's output.
 
 Requires: `imagemagick ffmpeg metaflac sox`
 
-- Convert images to required size. Here I assume PNG files and output to `png/` folder. See [http://www.imagemagick.org/Usage/crop/#extent](http://www.imagemagick.org/Usage/crop/#extent){:target="_blank"}
+- Convert images to required size. Here I assume PNG files and output to `png/` folder. See [http://www.imagemagick.org/Usage/crop/#extent](http://www.imagemagick.org/Usage/crop/#extent)
 
 ```for f in *.png; do convert "$f" -resize 800x600 -gravity center -background black -extent 800x600 png/"$f".png; done```
 
-- Generate video out of pngs. Here each image is shown for 20 seconds. See [https://trac.ffmpeg.org/wiki/Slideshow](https://trac.ffmpeg.org/wiki/Slideshow){:target="_blank"} and [https://en.wikibooks.org/wiki/FFMPEG_An_Intermediate_Guide/image_sequence#Filename_patterns](https://en.wikibooks.org/wiki/FFMPEG_An_Intermediate_Guide/image_sequence#Filename_patterns){:target="_blank"}
+- Generate video out of pngs. Here each image is shown for 20 seconds. See [https://trac.ffmpeg.org/wiki/Slideshow](https://trac.ffmpeg.org/wiki/Slideshow) and [https://en.wikibooks.org/wiki/FFMPEG_An_Intermediate_Guide/image_sequence#Filename_patterns](https://en.wikibooks.org/wiki/FFMPEG_An_Intermediate_Guide/image_sequence#Filename_patterns)
 
 ```ffmpeg -framerate 1/20 -pattern_type glob -i "png/*.png" -c:v libx264 -vf "fps=25,format=yuv420p" png.mp4```
 
-- Concatenate audio files. See [https://trac.ffmpeg.org/wiki/Concatenate](https://trac.ffmpeg.org/wiki/Concatenate){:target="_blank"}
+- Concatenate audio files. See [https://trac.ffmpeg.org/wiki/Concatenate](https://trac.ffmpeg.org/wiki/Concatenate)
 
 ```
 printf "file '%s'\n" ./*.flac > files.txt
 ffmpeg -f concat -safe 0 -i files.txt files.flac
 ```
 
-- Concatenate png video enough times to cover audio duration - in the example below it makes 10 copies. See [http://superuser.com/a/1116107/55867](http://superuser.com/a/1116107/55867){:target="_blank"}
+- Concatenate png video enough times to cover audio duration - in the example below it makes 10 copies. See [http://superuser.com/a/1116107/55867](http://superuser.com/a/1116107/55867)
 
 ```
 for i in {1..10}; do printf "file '%s'\n" png.mp4 >> pngs.txt; done
 ffmpeg -f concat -safe 0 -i pngs.txt -c copy pngs.mp4
 ```
 
-- Create YouTube video using acceptable encoding settings. See [https://www.virag.si/2015/06/encoding-videos-for-youtube-with-ffmpeg](https://www.virag.si/2015/06/encoding-videos-for-youtube-with-ffmpeg){:target="_blank"}
+- Create YouTube video using acceptable encoding settings. See [https://www.virag.si/2015/06/encoding-videos-for-youtube-with-ffmpeg](https://www.virag.si/2015/06/encoding-videos-for-youtube-with-ffmpeg)
 
 ```ffmpeg -i pngs.mp4 -i files.flac -shortest -codec:v libx264 -crf 21 -bf 2 -flags +cgop -pix_fmt yuv420p -codec:a aac -strict -2 -b:a 384k -r:a 48000 -movflags faststart youtube.mp4```
 

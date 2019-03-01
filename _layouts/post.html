@@ -16,7 +16,7 @@ layout: default
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    {{ content }}
+    {{ content | extlinks }}
   </div>
 
   {% if site.disqus.shortname %}

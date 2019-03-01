@@ -28,9 +28,11 @@ gems:
   - jemoji
   - jekyll-font-awesome-sass
   - jekyll-seo-tag
+  - jekyll-extlinks
 exclude:
   - Gemfile
   - Gemfile.lock
 font-awesome:
   assets: true
-
+extlinks:
+  attributes: {rel: 'noopener noreferrer', target: _blank}
