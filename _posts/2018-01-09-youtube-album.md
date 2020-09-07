@@ -13,6 +13,13 @@ Requires: `imagemagick ffmpeg metaflac sox`
 
 ```for f in *.png; do convert "$f" -resize 800x600 -gravity center -background black -extent 800x600 png/"$f".png; done```
 
+- If you have just one cover image to show, and you want one video file per track, you can take the following shortcut:
+
+```for f in *.flac; do ffmpeg -loop 1 -i cover.png -i "$f" -shortest -codec:v libx264 -crf 21 -bf 2 -flags +cgop -pix_fmt yuv420p -codec:a aac -strict -2 -b:a 384k -r:a 48000 -movflags faststart "${f/.flac/.mp4}"; done```
+
+
+Otherwise, read on:
+
 - Generate video out of pngs. Here each image is shown for 20 seconds. See [https://trac.ffmpeg.org/wiki/Slideshow](https://trac.ffmpeg.org/wiki/Slideshow) and [https://en.wikibooks.org/wiki/FFMPEG_An_Intermediate_Guide/image_sequence#Filename_patterns](https://en.wikibooks.org/wiki/FFMPEG_An_Intermediate_Guide/image_sequence#Filename_patterns)
 
 ```ffmpeg -framerate 1/20 -pattern_type glob -i "png/*.png" -c:v libx264 -vf "fps=25,format=yuv420p" png.mp4```
@@ -24,7 +31,7 @@ printf "file '%s'\n" ./*.flac > files.txt
 ffmpeg -f concat -safe 0 -i files.txt files.flac
 ```
 
-- Concatenate png video enough times to cover audio duration - in the example below it makes 10 copies. See [http://superuser.com/a/1116107/55867](http://superuser.com/a/1116107/55867)
+- Concatenate png video enough times to cover audio duration - in the example below we make 10 copies. See [http://superuser.com/a/1116107/55867](http://superuser.com/a/1116107/55867)
 
 ```
 for i in {1..10}; do printf "file '%s'\n" png.mp4 >> pngs.txt; done
