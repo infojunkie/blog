@@ -4,5 +4,5 @@ Using Ruby 2.7.2
 
 ```
 bundle install 
-bundle jekyll build
+bundle exec jekyll build
 ```
