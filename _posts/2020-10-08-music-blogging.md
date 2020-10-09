@@ -3,7 +3,7 @@ layout: post
 title: Music blogging
 date: 2020-10-08
 ---
-I'm interested in music blogging, to document my journey as a music practicioner. By "music blogging", I mean inserting music snippets within regular blog posts, just like one does with mathenatical notation, code snippets, media objects, etc. 
+I'm interested in music blogging, to document my journey as a music practicioner. By "music blogging", I mean inserting music snippets within regular blog posts, just like one does with mathematical notation, code snippets, media objects, etc. 
 
 To achieve this, I do the following:
 - Write the music in notation software. I use [Musescore](https://musescore.org) because it's open source AND works great :heart:
