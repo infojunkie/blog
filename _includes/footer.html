@@ -11,7 +11,9 @@
             {% if site.author %}
               {{ site.author | escape }}
             {% else %}
-              {{ site.title | escape }}
+              <a href="https://github.com/infojunkie/blog" rel="noopener noreferrer" target="_blank">
+                {{ site.title | escape }}
+              </a>
             {% endif %}
             </li>
             {% if site.email %}
