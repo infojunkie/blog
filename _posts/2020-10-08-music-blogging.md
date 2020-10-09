@@ -5,7 +5,7 @@ date: 2020-10-08
 ---
 I'm interested in music blogging, to document my journey as a music learner.
 
-Technically, I'm using an online music host ([Musescore](https://musescore.com/infojunkie), [Flat.io](https://flat.io/karim_ratib)) to write music snippets that can be embedded within a blog like this one, using either oEmbed or an HTML embed code.
+Technically, I'm using an online host ([Musescore](https://musescore.com/infojunkie), [Flat.io](https://flat.io/karim_ratib)) to write snippets that can be embedded within a blog like this one, using either oEmbed or an HTML embed code.
 
 Here's one using Musecore (using embed code, [oEmbed seems broken](https://musescore.com/oembed/endpoint?url=/user/55682/scores/6383405;format=json)):
 
