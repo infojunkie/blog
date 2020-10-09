@@ -31,6 +31,6 @@ Using oEmbed endpoint.
 # Conclusion
 Visually, the Flat embed is the most appealing to me, because it flows within the page without additional borders, unnecessary scrolling or intrusive chrome. The option to playback at slower speed is appreciated. I wish the snippet name were rendered in their bottom bar.
 
-Because I am interested in ["music localization"]({% post_url 2018-01-05-music-l10n %}), i.e. rendering non-Western music, I need to dig deeper into how well microtones, non-Latin fonts, etc. are supported on those platforms.
+Because I am interested in ["music localization"]({% post_url 2018-01-05-music-l10n %}), i.e. rendering non-Western music, I need to dig deeper into how well microtones, non-Latin fonts, ethnic instruments, etc. are supported on those platforms.
 
 Happy music blogging :musical_note:
