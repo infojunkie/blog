@@ -21,12 +21,12 @@ Using HTML embed code, because [oEmbed seems broken](https://musescore.com/group
 # Flat
 Using oEmbed endpoint.
 
-{% oembed https://flat.io/score/5f7fccd78d188876891f5626-the-entertainer-intro  %}
+{% oembed https://flat.io/score/5f98dedcdac66f6a161511da-the-entertainer-intro?sharingKey=140d65b4b00e3d28f8ceb9fe9c114600ead0379d6b996a7b0739d63293ddf0f954e5d93b7751b4055aa943bcd444f0bbf34508bf4a8ba05752296ec74adc527b  %}
 
 # Noteflight
 Using oEmbed endpoint.
 
-{% oembed https://www.noteflight.com/scores/view/c53ec5b4aea1d5dbe155a099e15a4255e07394d2 %}
+{% oembed https://www.noteflight.com/scores/view/60f7dc9ec8d4a7db487e89f89179af5c0a3a2286 %}
 
 # Conclusion
 Visually, the Flat embed is the most appealing to me, because it flows within the page without additional borders, unnecessary scrolling or intrusive chrome. The option to playback at slower speed is appreciated. I wish the snippet name were rendered in their bottom bar.
