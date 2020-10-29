@@ -26,7 +26,7 @@ Using oEmbed endpoint.
 # Noteflight
 Using oEmbed endpoint.
 
-{% oembed https://www.noteflight.com/scores/view/60f7dc9ec8d4a7db487e89f89179af5c0a3a2286 %}
+{% oembed https://www.noteflight.com/scores/view/fc73c762b41c4b5f10a28f582464e11a0c7a651b %}
 
 # Conclusion
 Visually, the Flat embed is the most appealing to me, because it flows within the page without additional borders, unnecessary scrolling or intrusive chrome. The option to playback at slower speed is appreciated. I wish the snippet name were rendered in their bottom bar.
