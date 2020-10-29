@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Extracting the media database from Synology NAS
+title: Extracting and manipulating the media database from Synology NAS
 date: 2018-04-03
 ---
 As a dedicated music listener, I care about my media library. I run a Synology DS411+ NAS
@@ -47,5 +47,19 @@ services:
 - `docker-compose up` will create a new, blank database `postgres` or reload the existing one
 - `bzip2 -dc mediaserver.sql.bz2 | docker exec -i postgres psql -U postgres` to load the database dump into Postgres - don't worry about the `ERROR:  role "MediaIndex" does not exist` errors
 
-That's it! Now I was able to connect to the server via [pgAdmin](https://www.pgadmin.org/) to explore the database.
-Next time I'll start doing useful stuff with it :wave:
+### Deleting stale tracks from the database
+In some cases, tracks and folders that are moved or removed on the NAS filesystem (especially from CIFS/Samba) are not reflected in the **Audio Station** app - this is because the stale paths are not removed from the `mediaserver` database.
+
+Here is a recipe to clean them up - I'll show the live steps but please practice standard backup
+procedure before doing so:
+
+- `ssh your-nas-hostname` to get into the NAS
+- `sudo su -` to become root
+- `su - postgres` to become the Postgres user
+- `psql mediaserver` to connect to the media database
+- `select * from track where path like '%path/to/old/files%';` to identify the tracks that you want to remove - make sure you get that right!
+- `delete from track where path like '%path/to/old/files%';` to remove those entries and their children records in related tables
+- Repeat the above `select` and `delete` instructions for tables `music` and `directory` with the same `path` condition
+- Refresh your audio app: the files and folders should be gone!
+
+That's it! Don't nuke your data :scream:
