@@ -21,6 +21,8 @@ Therein lies my interest to study machine learning. As a professional programmer
 
 `</essay>`
 
-Interestingly enough, today I stumbled (via Hacker News of course) on a [Facebook post by Yann LeCun](https://www.facebook.com/yann.lecun/posts/10155003011462143) that resembled a manifesto - renaming Deep Learning as "Differentiable Programming". This term resonates with me because it emphasizes a) that what is happening is a new form of programming and b) that the fact that functions (in the programming sense) need to be differentiable in order to allow for the machine to learn about patterns, instead of needing to be taught explicitly about all the cases. I am of course romanticizing gradient-based optimization algorithms :-) Here's the post (if Facebook oEmbed still works):
+Interestingly enough, today I stumbled (via Hacker News of course) on a Facebook post by Yann LeCun that resembled a manifesto - renaming Deep Learning as "Differentiable Programming". This term resonates with me because it emphasizes a) that what is happening is a new form of programming and b) that the fact that functions (in the programming sense) need to be differentiable in order to allow for the machine to learn about patterns, instead of needing to be taught explicitly about all the cases. I am of course romanticizing gradient-based optimization algorithms :-) Here's the post:
 
-{% oembed https://www.facebook.com/yann.lecun/posts/10155003011462143 %}
+<div id="fb-root"></div>
+<script async="1" defer="1" crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&amp;version=v8.0" nonce="sIZjrlCe"></script><div class="fb-post" data-href="https://www.facebook.com/yann.lecun/posts/10155003011462143" data-width="552"><blockquote cite="https://graph.facebook.com/722677142/posts/10155003011462143/" class="fb-xfbml-parse-ignore"><p>OK, Deep Learning has outlived its usefulness as a buzz-phrase.
+Deep Learning est mort. Vive Differentiable...</p>Posted by <a href="https://www.facebook.com/yann.lecun">Yann LeCun</a> on&nbsp;<a href="https://graph.facebook.com/722677142/posts/10155003011462143/">Friday, January 5, 2018</a></blockquote></div>
