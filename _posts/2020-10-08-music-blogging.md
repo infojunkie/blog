@@ -31,7 +31,7 @@ Using oEmbed endpoint.
 # Conclusion
 Visually, the Flat embed is the most appealing to me, because it flows within the page without additional borders, unnecessary scrolling or intrusive chrome. The option to playback at slower speed is appreciated. I wish the snippet name were rendered in their bottom bar.
 
-However, a killer feature that Musescore offers is _chord playback_ on top of the melody. This is very useful to hear and evaluate the specified harmony as a melodic theme is being played. Unfortunately, it would seem that MuseScore does not supporting exporting the [chord information to MusicXML format](https://www.musicxml.com/tutorial/chord-symbols-diagrams/chord-symbols/), thereby crippling the feature. I will likely attempt to patch this part of the MuseScore MusicXML export in the near future.
+However, a killer feature that Musescore offers is _chord playback_ on top of the melody. This is very useful to hear and evaluate the specified harmony as a melodic theme is being played. In addition, MuseScore supports exporting the [chord information to MusicXML format](https://www.musicxml.com/tutorial/chord-symbols-diagrams/chord-symbols/), which ensures that other platforms can receive the information.
 
 Because I am interested in ["music localization"]({% post_url 2018-01-05-music-l10n %}), i.e. rendering non-Western music, I need to dig deeper into how well microtones, non-Latin fonts, ethnic instruments, etc. are supported on those platforms.
 
