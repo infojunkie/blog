@@ -19,9 +19,9 @@ Using HTML embed code, because [oEmbed seems broken](https://musescore.com/group
 <iframe width="100%" height="394" src="https://musescore.com/user/55682/scores/6383405/embed" frameborder="0" allowfullscreen allow="autoplay; fullscreen"></iframe>
 
 # Flat
-Using oEmbed endpoint.
+Using HTML embed code.
 
-{% oembed https://flat.io/score/5f98dedcdac66f6a161511da-the-entertainer-intro?sharingKey=140d65b4b00e3d28f8ceb9fe9c114600ead0379d6b996a7b0739d63293ddf0f954e5d93b7751b4055aa943bcd444f0bbf34508bf4a8ba05752296ec74adc527b  %}
+<iframe src="https://flat.io/embed/5f98dedcdac66f6a161511da" height="450" width="750" frameBorder="0" allowfullscreen></iframe>
 
 # Noteflight
 Using oEmbed endpoint.
