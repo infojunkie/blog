@@ -53,9 +53,6 @@ GEM
       jekyll (>= 3.3, < 5.0)
     jekyll-watch (2.2.1)
       listen (~> 3.0)
-    jekyll_oembed (0.0.3)
-      jekyll (~> 3)
-      ruby-oembed (~> 0)
     jemoji (0.12.0)
       gemoji (~> 3.0)
       html-pipeline (~> 2.2)
@@ -85,7 +82,7 @@ GEM
       ffi (~> 1.0)
     rexml (3.2.4)
     rouge (3.23.0)
-    ruby-oembed (0.13.1)
+    ruby-oembed (0.14.0)
     safe_yaml (1.0.5)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
@@ -108,10 +105,13 @@ DEPENDENCIES
   jekyll-feed (~> 0.6)
   jekyll-font-awesome-sass
   jekyll-seo-tag
-  jekyll_oembed
   jemoji
   kramdown-parser-gfm
   minima (~> 2.0)
+  ruby-oembed (~> 0.14.0)
+
+RUBY VERSION
+   ruby 2.7.2p137
 
 BUNDLED WITH
    2.1.4
