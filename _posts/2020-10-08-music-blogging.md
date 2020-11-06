@@ -8,7 +8,7 @@ I'm interested in music blogging, to document my journey as a music practicioner
 To achieve this, I do the following:
 - Write the music in notation software. I use [MuseScore](https://musescore.org) because it's open source AND works great :heart:
 - Export the snippet into [MusicXML](https://musicxml.com) which is a (de-facto) standard interchange format.
-- Import the MusicXML into an online music platform, such as [MuseScore.com](https://musescore.com/infojunkie), [Flat](https://flat.io/karim_ratib), [Noteflight](https://www.noteflight.com/profile/18add9c28a546a47378515d9da5eb66208a169c1). The requirement from these platforms is that they support sharing / embedding snippets, typically via oEmbed or using an HTML embed code.
+- Import the MusicXML into an online music platform, such as [MuseScore.com](https://musescore.com/infojunkie), [Flat](https://flat.io/karim_ratib), [Soundslice](https://www.soundslice.com/users/kratib/), [Noteflight](https://www.noteflight.com/profile/18add9c28a546a47378515d9da5eb66208a169c1). The requirement from these platforms is that they support sharing / embedding snippets, typically via oEmbed or using an HTML embed code.
 - Embed the shared music snippet within a blog engine / CMS that supports oEmbed or HTML embed codes. For Jekyll, I use [ruby-oembed](https://github.com/ruby-oembed/ruby-oembed) + a [custom tag plugin](https://github.com/infojunkie/blog/blob/master/_plugins/oembed.rb) for oEmbed and [kramdown GFM parser](https://github.com/kramdown/parser-gfm) to directly paste HTML embed codes within the markdown.
 
 Here are the results for Scott Joplin's Entertainer, intro section:
@@ -22,6 +22,11 @@ Using HTML embed code, because [oEmbed endpoint is broken](https://musescore.com
 Using HTML embed code, because oEmbed endpoint is broken.
 
 <iframe src="https://flat.io/embed/5f98dedcdac66f6a161511da" height="450" width="750" frameBorder="0" allowfullscreen></iframe>
+
+# Soundslice
+Using HTML embed code, because oEmbed is a paid feature.
+
+ <iframe src="https://www.soundslice.com/slices/vWsfc/embed-channelpost/" width="100%" height="320" frameBorder="0"></iframe>
 
 # Noteflight
 Using oEmbed endpoint.
