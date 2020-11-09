@@ -19,9 +19,9 @@ Using HTML embed code, because [oEmbed endpoint is broken](https://musescore.com
 <iframe width="100%" height="394" src="https://musescore.com/user/55682/scores/6383405/embed" frameborder="0" allowfullscreen allow="autoplay; fullscreen"></iframe>
 
 # Flat
-Using HTML embed code, because oEmbed endpoint is broken.
+Using oEmbed endpoint.
 
-<iframe src="https://flat.io/embed/5f98dedcdac66f6a161511da" height="450" width="750" frameBorder="0" allowfullscreen></iframe>
+{% oembed https://flat.io/score/5f98dedcdac66f6a161511da-the-entertainer-intro %}
 
 # Soundslice
 Using HTML embed code, because oEmbed is a paid feature.
