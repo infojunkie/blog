@@ -36,7 +36,7 @@ invalid.musicxml:3: element score-partwise: Schemas validity error : Element 'sc
 invalid.musicxml fails to validate
 ```
 
-The difference between external links to `xml.xsd` and `xlink.xsd` is twofold:
+The difference between local and external links to `xml.xsd` and `xlink.xsd` is twofold:
 - The time taken for validation is significant. For local files:
 
 ```
