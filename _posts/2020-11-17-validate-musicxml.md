@@ -40,7 +40,7 @@ The difference between local and external links to `xml.xsd` and `xlink.xsd` is 
 - The time taken for validation is significant. For local files:
 
 ```
-time xmllint --schema musicxml-3.1/schema/musicxml.xsd valid.musicxml --noout
+$ time xmllint --schema musicxml-3.1/schema/musicxml.xsd valid.musicxml --noout
 valid.musicxml validates
 
 real	0m0.043s
@@ -50,7 +50,7 @@ sys	0m0.005s
 whereas for external files, it takes 15 _seconds_:
 
 ```
-time xmllint --schema musicxml-3.1/schema/musicxml.xsd valid.musicxml --noout
+$ time xmllint --schema musicxml-3.1/schema/musicxml.xsd valid.musicxml --noout
 valid.musicxml validates
 
 real	0m15.478s
@@ -60,13 +60,13 @@ sys	0m0.005s
 - Secondly, in some environments, it may be necessary to run without an Internet connection, i.e `xmllint --nonet`. Here's what happens in this case:
 
 ```
-xmllint --schema musicxml-3.1/schema/musicxml.xsd valid.musicxml --noout --nonet
+$ xmllint --schema musicxml-3.1/schema/musicxml.xsd valid.musicxml --noout --nonet
 valid.musicxml validates
 ```
 versus
 
 ```
-xmllint --schema musicxml-3.1/schema/musicxml.xsd valid.musicxml --noout --nonet
+$ xmllint --schema musicxml-3.1/schema/musicxml.xsd valid.musicxml --noout --nonet
 I/O error : Attempt to load network entity http://www.w3.org/2001/xml.xsd
 warning: failed to load external entity "http://www.w3.org/2001/xml.xsd"
 musicxml-3.1/schema/musicxml.xsd:24: element import: Schemas parser warning : Element '{http://www.w3.org/2001/XMLSchema}import': Failed to locate a schema at location 'http://www.w3.org/2001/xml.xsd'. Skipping the import.
