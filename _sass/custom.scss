@@ -3,3 +3,15 @@ div.emphasis {
   padding: 5px;
   margin-bottom: 10px;
 }
+
+figure {
+  display: inline-block;
+}
+
+a.header {
+  color: inherit;
+}
+
+a.header:hover {
+  text-decoration: none;
+}

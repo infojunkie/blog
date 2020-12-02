@@ -13,27 +13,27 @@ To achieve this, I do the following:
 
 Here are the results for Scott Joplin's Entertainer, intro section:
 
-# Musecore
+### Musecore
 Using HTML embed code, because [oEmbed endpoint is broken](https://musescore.com/groups/improving-musescore-com/discuss/5077716).
 
 <iframe width="100%" height="394" src="https://musescore.com/user/55682/scores/6383405/embed" frameborder="0" allowfullscreen allow="autoplay; fullscreen"></iframe>
 
-# Flat
+### Flat
 Using oEmbed endpoint.
 
 {% oembed https://flat.io/score/5f98dedcdac66f6a161511da-the-entertainer-intro %}
 
-# Soundslice
+### Soundslice
 Using HTML embed code, because oEmbed is a paid feature.
 
  <iframe src="https://www.soundslice.com/slices/vWsfc/embed-channelpost/" width="100%" height="320" frameBorder="0"></iframe>
 
-# Noteflight
+### Noteflight
 Using oEmbed endpoint.
 
 {% oembed https://www.noteflight.com/scores/view/fc73c762b41c4b5f10a28f582464e11a0c7a651b %}
 
-# Conclusion
+### Conclusion
 Visually, the Flat embed is the most appealing to me, because it flows within the page without additional borders, unnecessary scrolling or intrusive chrome. The option to playback at slower speed is appreciated. I wish the snippet name were rendered in their bottom bar.
 
 However, a killer feature that MuseScore.com offers is _chord playback_ on top of the melody. This is very useful to quickly hear and evaluate the specified harmony as the melodic theme is being played. In addition, MuseScore (the music engraver) exports [chord information to MusicXML format](https://www.musicxml.com/tutorial/chord-symbols-diagrams/chord-symbols/), which ensures that other platforms receive the information.

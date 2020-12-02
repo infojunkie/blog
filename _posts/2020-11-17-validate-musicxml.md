@@ -7,7 +7,7 @@ MusicXML is a standard open format for exchanging digital sheet music, supported
 
 It's a complex format, aiming at capturing both presentation and playback information for a piece of music. That makes it tricky to parse, and tricky to generate. This short note presents a recipe to easily validate MusicXML 3.1 files using open source tools.
 
-# MusicXML validation on the console
+## MusicXML validation on the console
 
 MusicXML ships with XSD and DTD files that describe the document structure. We can use the widely-supported tool `xmllint` (included in [libxml2](http://www.xmlsoft.org/) on most platforms) to validate MusicXML files against the official XSD. As always, a bit of fiddling is needed to get things right :sweat_smile:
 
@@ -77,7 +77,9 @@ musicxml-3.1/schema/musicxml.xsd:25: element import: Schemas parser warning : El
 WXS schema musicxml-3.1/schema/musicxml.xsd failed to compile
 ```
 
-# MusicXML validation programmatically
-If you application imports or exports MusicXML files, it's a good idea to validate them before processing, to avoid tripping your code or exporting invalid files. On my [iReal Pro to MusicXML converter](https://github.com/infojunkie/ireal-musicxml), I use the JavaScript module [validate-with-xmllint](https://github.com/aautio/validate-with-xmllint) in the tests to ensure that the converter module generates valid MusicXML. Since this needs to run at build time, and not on production, I only [need to install `xmllint` on the CI server](https://github.com/infojunkie/ireal-musicxml/blob/main/.travis.yml#L7).
+## MusicXML validation programmatically
+If you application exports MusicXML files, it's a good idea to validate them before processing, to avoid tripping your code or exporting invalid files. On my [iReal Pro to MusicXML converter](https://github.com/infojunkie/ireal-musicxml), I use the JavaScript module [validate-with-xmllint](https://www.npmjs.com/package/validate-with-xmllint) in the tests to ensure that the converter module generates valid MusicXML. Since this needs to run at build time, and not on production, I only [need to install `xmllint` on the CI server](https://github.com/infojunkie/ireal-musicxml/blob/main/.travis.yml#L7).
+
+But XSD validation is not enough to ensure that your generated XML is valid _semantically_. It is also necessary to ensure that the expected elements are present, and contain the right values. For this, you need to reach inside your generated XML and compare generated values with your expectations. The easiest and most maintainable way I've found for that is using [XPath, the XML query language](https://developer.mozilla.org/en-US/docs/Web/XPath). For this, I use [`xmldom`](https://www.npmjs.com/package/xmldom) and [`xpath.js`](https://www.npmjs.com/package/xpath.js) to [validate the generated MusicXML files during the test phase](https://github.com/infojunkie/ireal-musicxml/blob/f915531d2b8abef62beebdf72cacde7d555c4f54/test/musicxml.spec.js#L40-L57).
 
 That's it! Hope you find this useful :raised_hands:
