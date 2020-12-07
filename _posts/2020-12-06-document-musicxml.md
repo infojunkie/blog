@@ -16,7 +16,7 @@ and obtained [an HTML version of the full MusicXML schema definition]({% link /m
 ## Pros
 - One-line transformation process means easy automation
 - Single HTML file means no search engine needed - browser page search is enough
-- Single HTML file means easy easy packaging and hosting
+- Single HTML file means easy packaging and hosting
 - HTML5 / UTF-8 / Markdown / Bootstrap support means better documentation output
 
 ## Cons
