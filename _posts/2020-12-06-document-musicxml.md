@@ -3,6 +3,8 @@ layout: post
 title: Documenting the MusicXML schema
 date: 2020-12-06
 ---
+{% include changelog.html changes="Dec 8, 2020 | Community Group update" %}
+
 The [latest MusicXML version is 3.1](https://w3c.github.io/musicxml/). However, the [official MusicXML documentation stops at version 3.0](http://usermanuals.musicxml.com/MusicXML/MusicXML.htm), and the Music Notation Community Group's plan to keep the documentation updated is unclear.
 
 So I decided to spend some time researching existing tools to convert MusicXML's [schema definition (XSD)](https://en.wikipedia.org/wiki/XML_Schema_(W3C)) to HTML, and hit upon [`xs3p`](https://github.com/Mapudo/xs3p), which has a venerable lineage going back several years and multiple incarnations. Since XSD is itself expressed as XML, the simplest approach (and the one adopted by `xs3p`) is to produce an [XSLT script](https://developer.mozilla.org/en-US/docs/Web/XSLT) that transforms the schema definition into HTML.
@@ -25,3 +27,6 @@ and obtained [an HTML version of the full MusicXML schema definition]({% link /m
 - Left-side navigation pane scrolling is tied to main content scrolling
 
 If there's interest from the [W3C Music Notation Community Group](https://www.w3.org/community/music-notation/), I will consider working on some fixes to enhance the HTML output :crossed_fingers:
+
+## Update Dec 8, 2020
+The W3C MusicXML Community Group is ready to move ahead with a new documentation site! [The discussion is happening here](https://github.com/w3c/musicxml/issues/353) - they were gracious enough to mention my modest experiement :heart_eyes:

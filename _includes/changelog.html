@@ -1,0 +1,17 @@
+<table class="changelog">
+  <thead>
+    <th>Changelog</th>
+    <th></th>
+  </thead>
+  <tbody>
+{% assign changes = include.changes | split: "||" %}
+{% for change in changes %}
+  <tr>
+    {% assign cells = change | split: "|" %}
+    {% for cell in cells %}
+      <td>{{ cell }}</td>
+    {% endfor %}
+  </tr>
+{% endfor %}
+  </tbody>
+</table>
