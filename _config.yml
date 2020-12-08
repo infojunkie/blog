@@ -35,3 +35,5 @@ font-awesome:
   assets: true
 extlinks:
   attributes: {rel: 'noopener noreferrer', target: _blank}
+isso:
+  path: /isso

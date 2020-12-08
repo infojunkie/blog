@@ -19,7 +19,7 @@ layout: default
     {{ content | extlinks }}
   </div>
 
-  {% if site.disqus.shortname %}
-    {% include disqus_comments.html %}
+  {% if site.isso.path %}
+    {% include isso.html %}
   {% endif %}
 </article>
