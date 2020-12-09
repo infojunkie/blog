@@ -29,4 +29,4 @@ and obtained [an HTML version of the full MusicXML schema definition]({% link /m
 If there's interest from the [W3C Music Notation Community Group](https://www.w3.org/community/music-notation/), I will consider working on some fixes to enhance the HTML output :crossed_fingers:
 
 ## Update Dec 8, 2020
-The W3C MusicXML Community Group is ready to move ahead with a new documentation site! [The discussion is happening here](https://github.com/w3c/musicxml/issues/353) - they were gracious enough to mention my modest experiement :heart_eyes:
+The W3C MusicXML Community Group is ready to move ahead with a new documentation site! [The discussion is happening here](https://github.com/w3c/musicxml/issues/353) - they were gracious enough to mention my modest experiment :heart_eyes:
