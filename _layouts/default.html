@@ -3,7 +3,24 @@
 
   {% include head.html %}
 
-  <body>
+  <body style="visibility: hidden;" class="no-js">
+    <script>
+      // FOUC handling
+      // https://www.primative.net/blog/how-to-get-rid-of-the-flash-of-unstyled-content/
+      const domReady = (cb) => {
+        document.readyState === 'interactive' || document.readyState === 'complete'
+          ? cb()
+          : document.addEventListener('DOMContentLoaded', cb);
+      };
+      domReady(() => {
+        // Display body when DOM is loaded
+        document.body.style.visibility = 'visible';
+      });
+
+      // If JS is disabled, "no-js" class causes body to be visible from the beginning.
+      // If JS is enabled, remove the "no-js" class will force-hide the body until the above kicks in.
+      document.querySelector('body').classList.remove('no-js');
+    </script>
 
     {% include header.html %}
 
