@@ -3,7 +3,7 @@ layout: post
 title: Visualizing musical tunings in the browser
 date: 2021-01-07
 ---
-One of my recurring intellectual joys is to learn about the deep connections between music and mathematics. About a decade ago, I discovered the amazing works of Gareth Loy, ["Musimathics: The Mathematical Foundations of Music"](http://www.musimathics.com/), a generous 2-volume overview of the mathematics and physics underlying many different aspects of music, from waves to sampling to psychoacoustics. For a non-mathematician like myself, the maths in this book are easy to follow and the intuition is greatly helped by examples and diagrams. It has become one of my favourite references, which I've had the pleasure to offer to many of my similarly-minded friends.
+One of my recurring intellectual joys is to learn about the deep connections between music and mathematics. About a decade ago, I discovered the amazing work of Gareth Loy, ["Musimathics: The Mathematical Foundations of Music"](http://www.musimathics.com/), a generous 2-volume overview of the mathematics and physics underlying many different aspects of music, from waves to sampling to psychoacoustics. For a non-mathematician like myself, the maths in this book are easy to follow and the intuition is greatly helped by examples and diagrams. It has become one of my favourite references, which I've had the pleasure to offer to many of my similarly-minded friends.
 
 {% include image.html description="Musimathics Volume I" url="/assets/LOY_revised_1.gif" %}
 {% include image.html description="Musimathics Volume II" url="/assets/LOY_revised_2.gif" %}
