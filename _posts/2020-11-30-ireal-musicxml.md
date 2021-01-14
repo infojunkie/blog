@@ -3,6 +3,8 @@ layout: post
 title: First release of iReal Pro to MusicXML converter
 date: 2020-11-30
 ---
+{% include changelog.html changes="Jan 14, 2021 | Further description of iReal Pro playback emulation " %}
+
 Yesterday, I finally published an [online demo of my iReal Pro to MusicXML converter (unimaginatively called `ireal-musicxml`)](https://ethereum.karimratib.me:8082/), having spent around 300% of the time I had originally anticipated to reach the first release of this module. In this post, I hope to summarize the challenges, lessons learned, as well as the context around this work.
 
 But first, some pretty pictures! Following is the same iReal Pro leadsheet for [Herbie Hancock's Butterfly](https://www.youtube.com/watch?v=knbmKDUYDXc), as rendered by iReal Pro, then rendered by MuseScore and OpenSheetMusicDisplay (OSMD) after MusicXML conversion. Click each thumbnail to see a larger image.
@@ -21,7 +23,7 @@ Furthermore, some limitations of iReal Pro are structural. For example, one of m
 
 All is not lost. A great deal of the iReal Pro's value lies in its content, namely the thousands of royalty-free leadsheets that are community-driven, and therefore evolving with fixes and enhancements as they are being actively used. It is in this spirit that I decided to write a conversion module from the iReal Pro song format to the [standard music interchange format, MusicXML](https://www.w3.org/2017/12/musicxml31/). The value of converting these leadsheets to a standard interchange format lies in the ability to rely on a wealth of [supporting applications](https://www.musicxml.com/software/) for further processing.
 
-Although iReal Pro already features a MusicXML export function, the generated files refer to an obsolete version of the music standard, in addition to being non-compliant to its schema. ([I've posted about MusicXML validation]({% post_url 2020-11-17-validate-musicxml %}) before, because it is an integral part of my development process). Further, the MusicXML export feature is only accessible via the app's UI and cannot be automated or batched.
+Although iReal Pro already features a MusicXML export function, the generated files refer to an obsolete version of the music standard, in addition to being non-compliant to its schema. ([I've posted about MusicXML validation]({% post_url 2020-11-17-validate-musicxml %}) before, because it is an integral part of my development process). Further, the MusicXML export feature is only accessible via the app's UI and cannot be automated or batched. Most importantly, perhaps, iReal Pro's native MusicXML fails on some of its own leadsheets, including those that feature odd time signatures - more on that below.
 
 ## Building the module
 
@@ -58,7 +60,13 @@ I turned to the excellent module [`chord-symbol`](https://github.com/no-chris/ch
 
 ### Emulating the iReal Pro playback model
 
-iReal Pro's design pragmatically structures the musical information into "cells", with a fixed number of cells (16 of them) per row - a row corresponds to a [single-staff system](https://en.wikipedia.org/wiki/Staff_(music)). As such, a cell does _not_ correspond to a single beat, because barlines can be positioned anywhere within the row. In addition, a chord's minimum duration is one beat. The algorithm used by iReal Pro to [determine the onset and duration of chords inside a measure is undocumented](https://www.irealb.com/forums/showthread.php?25161-Using-empty-cells-to-control-chord-duration), and I needed to perform many experiments with different time signatures to reach a [conversion algorithm that performs adequately](https://github.com/infojunkie/ireal-musicxml/blob/v1.0.1/src/musicxml.js#L712-L760) for the cases I have tested.
+iReal Pro's design pragmatically structures the musical information into "cells", with a fixed number of cells (16 of them) per row - a row corresponds to a [single-staff system](https://en.wikipedia.org/wiki/Staff_(music)). As such, a cell does _not_ correspond to a single beat, because barlines can be positioned anywhere within the row. In addition, a chord's minimum duration is one beat. The algorithm used by iReal Pro to [determine the onset and duration of chords inside a measure is undocumented](https://www.irealb.com/forums/showthread.php?25161-Using-empty-cells-to-control-chord-duration), and I needed to perform many experiments with different time signatures to reach a [conversion algorithm that performs adequately](https://github.com/infojunkie/ireal-musicxml/blob/v1.0.1/src/musicxml.js#L712-L760) for the cases I have tested. In fact, my testing revealed that iReal Pro's native MusicXML export fails on some of the trickier leadsheets, including those featuring odd time signatures such as Take Five (5/4) which ends up exporting 6-beat measures!
+
+After much thinking, I ended up [devising a simple algorithm](https://github.com/infojunkie/ireal-musicxml/blob/c89bcfe7df34d3d3df535ef074e6a81399327304/src/musicxml.js#L815-L862) with minimal heuristics and some desirable properties:
+- No measures are generated with wrong beat counts
+- The output is compatible with iReal Pro's playback behaviour in the "correct" cases
+
+The basic idea of the algorithm is to evenly divide the available spaces found in a cell among the existing chords, up until reaching the measure's beat count based on time signature. As such, the only hard error condition is to find more chords than available beats, since for iReal Pro, a chord's minimal duration is a single beat. Fortunately, the iReal Pro editor itself prevents this condition at the UI level, so we should be fine in most cases.
 
 ### Ensuring compatibility with other software
 
