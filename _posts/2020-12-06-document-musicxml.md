@@ -2,7 +2,6 @@
 layout: post
 title: Documenting the MusicXML schema
 date: 2020-12-06
-excerpt_separator: <!--more-->
 ---
 {% include changelog.html changes="Dec 8, 2020 | Community Group update" %}
 

@@ -7,6 +7,8 @@ date: 2020-11-30
 
 Yesterday, I finally published an [online demo of my iReal Pro to MusicXML converter (unimaginatively called `ireal-musicxml`)](https://ethereum.karimratib.me:8082/), having spent around 300% of the time I had originally anticipated to reach the first release of this module. In this post, I hope to summarize the challenges, lessons learned, as well as the context around this work.
 
+<!--more-->
+
 But first, some pretty pictures! Following is the same iReal Pro leadsheet for [Herbie Hancock's Butterfly](https://www.youtube.com/watch?v=knbmKDUYDXc), as rendered by iReal Pro, then rendered by MuseScore and OpenSheetMusicDisplay (OSMD) after MusicXML conversion. Click each thumbnail to see a larger image.
 
 {% include image.html description="iReal Pro (source)" url="/assets/butterfly-ireal.png" %}
