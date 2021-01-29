@@ -26,7 +26,6 @@ theme: minima
 plugins:
   - jekyll-feed
   - jemoji
-  - jekyll-font-awesome-sass
   - jekyll-seo-tag
   - jekyll-extlinks
 exclude:
