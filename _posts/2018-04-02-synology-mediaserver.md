@@ -20,12 +20,10 @@ Here's what I did to load `mediaserver` onto my laptop:
 
 ### Get the database dump
 - `ssh rokanan` to get into the NAS (I like Ursula Le Guin)
-- `sudo su -` to become root
-- `su - postgres` to become the Postgres user
+- `sudo su - postgres` to become the Postgres user
 - `pg_dump mediaserver | bzip2 > mediaserver.sql.bz2` to dump the desired database
-- `exit` to return to root
-- `mv /var/services/pgsql/mediaserver.sql.bz2 .` to move the file to my home
-- `chown your-username:users mediaserver.sql.bz2` to make the file accessible
+- `exit` to return to your account
+- `sudo mv /var/services/pgsql/mediaserver.sql.bz2 .` to move the file to your home
 - exit the NAS
 - `scp rokanan:~/mediaserver.sql.bz2 .` to get the file locally
 
@@ -34,18 +32,22 @@ I used a [Postgres Docker image](https://hub.docker.com/_/postgres/) to avoid ru
 To spin it up, I used Docker Compose with the following Compose file:
 ```
 version: '3'
+volumes:
+  mediaserver:
 services:
   postgres:
-    container_name: postgres
-    restart: always
-    image: postgres:latest
+    image: postgres:9.5
     volumes:
-      - ./database:/var/lib/postgresql/data
+      - mediaserver:/var/lib/postgresql/data
     ports:
       - 5432:5432
+    environment:
+      - POSTGRES_DB=mediaserver
+      - POSTGRES_USER=MediaIndex
+      - POSTGRES_PASSWORD=MediaIndex
 ```
-- `docker-compose up` will create a new, blank database `postgres` or reload the existing one
-- `bzip2 -dc mediaserver.sql.bz2 | docker exec -i postgres psql -U postgres` to load the database dump into Postgres - don't worry about the `ERROR:  role "MediaIndex" does not exist` errors
+- `docker-compose up` will create a new, blank database `mediaserver` or reload the existing one
+- `bzip2 -dc mediaserver.sql.bz2 | docker-compose exec -T postgres psql -U MediaIndex mediaserver` to load the database dump into Postgres
 
 ### Deleting stale tracks from the database
 In some cases, tracks and folders that are moved or removed on the NAS filesystem (especially from CIFS/Samba) are not reflected in the **Audio Station** app - this is because the stale paths are not removed from the `mediaserver` database.
@@ -54,8 +56,7 @@ Here is a recipe to clean them up - I'll show the live steps but please practice
 procedure before doing so:
 
 - `ssh your-nas-hostname` to get into the NAS
-- `sudo su -` to become root
-- `su - postgres` to become the Postgres user
+- `sudo su - postgres` to become the Postgres user
 - `psql mediaserver` to connect to the media database
 - `select * from track where path like '%path/to/old/files%';` to identify the tracks that you want to remove - make sure you get that right!
 - `delete from track where path like '%path/to/old/files%';` to remove those entries and their children records in related tables
