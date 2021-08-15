@@ -1,0 +1,18 @@
+<div id="{{ include.id }}" width="800"></div>
+
+<script>
+window.addEventListener('load', function() {
+  var osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay("{{ include.id }}");
+  osmd.setOptions({
+    backend: "svg",
+    drawingParameters: "compacttight"
+  });
+  osmd
+    .load("{{ include.url }}")
+    .then(
+      function() {
+        osmd.render();
+      }
+    );
+})
+</script>

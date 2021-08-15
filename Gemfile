@@ -27,7 +27,7 @@ gem 'ruby-oembed', '~> 0.14.0'
 group :jekyll_plugins do
    gem "jekyll-feed", "~> 0.6"
    gem "jemoji"
-   gem 'jekyll-fontawesome-svg', '~> 0.3.4'
+   gem "jekyll-fontawesome-svg", '~> 0.3.4'
    gem "jekyll-seo-tag"
    gem "jekyll-extlinks"
 end
