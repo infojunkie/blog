@@ -1,6 +1,6 @@
 <figure class="image">
-  <a href="{{ include.url }}" rel="noopener noreferrer" target="_blank">
-    <img src="{{ include.url }}" style="max-width: 200px;" alt="{{ include.description }}">
+  <a href="{{ include.link | default: include.url }}" rel="noopener noreferrer" target="_blank">
+    <img src="{{ include.url }}" style="max-width: {{ include.width | default: '200px' }};" alt="{{ include.description }}">
   </a>
   <figcaption>{{ include.description }}</figcaption>
 </figure>
