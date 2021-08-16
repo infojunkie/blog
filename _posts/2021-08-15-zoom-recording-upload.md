@@ -38,7 +38,7 @@ The plan of the function is thus:
 - Upload the video file to S3, without creating an intermediate file in the Lambda environment
 
 # Second attempt: Single function
-My first attempt was to implement the outline above in a single function that loops over the video files and uploads them sequentially. I was very proud of writing a streaming file download/upload loop that does not need intermediate storage, as follows:
+My next attempt was to implement the outline above in a single function that loops over the video files and uploads them sequentially. I was very proud of writing a streaming file download/upload loop that does not need intermediate storage, as follows:
 
 ```javascript
 async uploadZoomToS3(zoomDownloadUrl, size, fileName, prefix) {
