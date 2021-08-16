@@ -21,10 +21,9 @@ Unfortunately, the shape of the payload received by the Zoom trigger was too com
 - Also, generating the correct filename (as needed for downstream processing on the course platform) also proved to be a challenge in this low-code environment.
 - Finally, a JSON Web Token is needed to access the file recordings, which Zapier does not support short of generating a "forever" token and storing it in the zap's action settings. This presents security and maintenance issues that I preferred to avoid.
 
-# Second attempt: AWS Lambda
+# Moving to AWS Lambda
 I regretfully abandoned the Zapier approach, and decided to bite the bullet and write new code to perform my function. For deployment simplicity, I chose to write it using the [serverless Node.js framework](https://www.serverless.com/) and to host it on AWS Lambda.
 
-# Planning the function
 The Zoom API provides webhook notifications about events in a Zoom account. To setup a webhook integration, I created a Zoom Marketplace app of type JWT (JSON Web Token) and added to it an event subscription for the [Recording Completed event](https://marketplace.zoom.us/docs/api-reference/webhook-reference/recording-events/recording-completed). Each event subscription accepts a single webhook endpoint, which is the URL of the AWS Lambda HTTP endpoint.
 
 The plan of the function is thus:
@@ -38,7 +37,7 @@ The plan of the function is thus:
 - Download the video file from Zoom
 - Upload the video file to S3, without creating an intermediate file in the Lambda environment
 
-# Third attempt: Single function
+# Second attempt: Single function
 My first attempt was to implement the outline above in a single function that loops over the video files and uploads them sequentially. I was very proud of writing a streaming file download/upload loop that does not need intermediate storage, as follows:
 
 ```javascript
