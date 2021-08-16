@@ -7,7 +7,7 @@ While helping out my friends at [Labyrinth Online](https://labyrinthonline.org/)
 
 <!--more-->
 
-{% include image.html description="Labyrinth Online is a music school offering live classes for modal music, encompassing musical traditions of the Mediterranean and the Near East" url="/assets/labyrinth-online.png" width="100%" link="https://labyrinthonline.org" %}
+{% include image.html description="Labyrinth Online is a music school offering live online classes for modal music, encompassing musical traditions of the Mediterranean and the Near East." url="/assets/labyrinth-online.png" width="100%" link="https://labyrinthonline.org" %}
 
 Conceptually, the function couldn't be simpler: Receive a webhook call from Zoom that a meeting's recordings are available, and move all the video files therein to a specific AWS S3 bucket folder, with a specific filename pattern. But the proverbial devil lurked in the details, and I think the end result warrants a short description of the solution.
 
@@ -22,12 +22,11 @@ Unfortunately, the shape of the payload received by the Zoom trigger was too com
 - Finally, a JSON Web Token is needed to access the file recordings, which Zapier does not support short of generating a "forever" token and storing it in the zap's action settings. This presents security and maintenance issues that I preferred to avoid.
 
 # Second attempt: AWS Lambda
-I regretfully abandoned this approach, and decided to bite the bullet and write new code to perform my function. For deployment simplicity, I chose to write it using the [serverless Node.js framework](https://www.serverless.com/) and to host it on AWS Lambda.
-
-# Getting started: The Zoom API
-The Zoom API provides webhook notifications about events in a Zoom account. To setup a webhook integration, I created a Zoom Marketplace app of type JWT (JSON Web Token) and added to it an event subscription for the [Recording Completed event](https://marketplace.zoom.us/docs/api-reference/webhook-reference/recording-events/recording-completed). Each event subscription accepts a single webhook endpoint, which is the URL of the AWS Lambda HTTP endpoint.
+I regretfully abandoned the Zapier approach, and decided to bite the bullet and write new code to perform my function. For deployment simplicity, I chose to write it using the [serverless Node.js framework](https://www.serverless.com/) and to host it on AWS Lambda.
 
 # Planning the function
+The Zoom API provides webhook notifications about events in a Zoom account. To setup a webhook integration, I created a Zoom Marketplace app of type JWT (JSON Web Token) and added to it an event subscription for the [Recording Completed event](https://marketplace.zoom.us/docs/api-reference/webhook-reference/recording-events/recording-completed). Each event subscription accepts a single webhook endpoint, which is the URL of the AWS Lambda HTTP endpoint.
+
 The plan of the function is thus:
 - Upon reception of the webhook,
 - Don't continue unless it's a legitimate course meeting
@@ -39,7 +38,7 @@ The plan of the function is thus:
 - Download the video file from Zoom
 - Upload the video file to S3, without creating an intermediate file in the Lambda environment
 
-# First attempt: Single function
+# Third attempt: Single function
 My first attempt was to implement the outline above in a single function that loops over the video files and uploads them sequentially. I was very proud of writing a streaming file download/upload loop that does not need intermediate storage, as follows:
 
 ```javascript
@@ -73,7 +72,7 @@ In retrospect, how naive I was! I soon noticed that most of the files never made
 
 {% include image.html url="/assets/meme-two-states-of-every-programmer.png" width="100%" %}
 
-# Second attempt: Async functions
+# Final attempt: Async to the rescue!
 After more research into what seemed to be a common problem, I found that [Lambda functions can be called asynchronously](https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html) - but only if they are not wired to an HTTP endpoint (which does make sense). I decided to split the function into two: one function that receives the Zoom webhook call, loops over the recorded files and invokes a second, async function that performs the actual upload.
 
 It was relatively painless to create this setup, barring a couple of details:
