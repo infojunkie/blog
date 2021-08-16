@@ -43,10 +43,10 @@ The plan of the function is thus:
 My first attempt was to implement the outline above in a single function that loops over the video files and uploads them sequentially. I was very proud of writing a streaming file download/upload loop that does not need intermediate storage, as follows:
 
 ```javascript
-async uploadZoomToS3(url, size, fileName, prefix) {
+async uploadZoomToS3(zoomDownloadUrl, size, fileName, prefix) {
   const zoomToken = this.generateZoomToken();
   return new Promise((resolve, reject) => {
-    fetch(`${url}?access_token=${zoomToken}`, {
+    fetch(`${zoomDownloadUrl}?access_token=${zoomToken}`, {
       method: 'GET',
       redirect: 'follow'
     })
@@ -62,7 +62,7 @@ async uploadZoomToS3(url, size, fileName, prefix) {
       return request.promise();
     })
     .then(data => {
-      this.log(`Successfully uploaded ${fileName} to ${prefix}.`);
+      console.log(`Successfully uploaded ${fileName} to ${prefix}.`);
       resolve(data);
     });
   });
