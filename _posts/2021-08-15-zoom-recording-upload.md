@@ -27,15 +27,14 @@ I regretfully abandoned the Zapier approach, and decided to bite the bullet and 
 The Zoom API provides webhook notifications about events in a Zoom account. To setup a webhook integration, I created a Zoom Marketplace app of type JWT (JSON Web Token) and added to it an event subscription for the [Recording Completed event](https://marketplace.zoom.us/docs/api-reference/webhook-reference/recording-events/recording-completed). Each event subscription accepts a single webhook endpoint, which is the URL of the AWS Lambda HTTP endpoint.
 
 The plan of the function is thus:
-- Upon reception of the webhook,
+- Upon reception of the webhook:
 - Don't continue unless it's a legitimate course meeting
 - Select the eligible video files to be uploaded
 - Create the appropriate video folder in a configured AWS S3 bucket
-- Generate a short-lived JWT for the Zoom video file download
-- For each video file,
-- Generate a filename
-- Download the video file from Zoom
-- Upload the video file to S3, without creating an intermediate file in the Lambda environment
+- For each video file:
+- Generate a short-lived JWT for the Zoom file download
+- Generate a filename for the S3 file upload
+- Download the file from Zoom and upload to S3, without creating an intermediate file in the Lambda environment
 
 # Second attempt: Single function
 My next attempt was to implement the outline above in a single function that loops over the video files and uploads them sequentially. I was very proud of writing a streaming file download/upload loop that does not need intermediate storage, as follows:
