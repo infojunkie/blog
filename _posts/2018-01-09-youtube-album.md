@@ -62,6 +62,7 @@ youtube-playlist.sh *.flac
 ```bash
 #!/bin/bash
 
+# youtube-playlist.sh
 # Show album track list in YouTube-friendly format including
 # clickable track offsets.
 #
@@ -91,6 +92,7 @@ ffmpeg -i youtube.mp4 -i chapters -map_metadata 1 -codec copy youtube-chapters.m
 ```bash
 #!/bin/bash
 
+# youtube-chapters.sh
 # Show album track list in ffmpeg metadata format
 #
 # Only works with .flac atm :-(
