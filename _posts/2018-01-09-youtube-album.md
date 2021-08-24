@@ -81,7 +81,7 @@ do
 done
 ```
 
- Generate a video file with chapters.
+ Generate a video file with chapters:
 
 ```bash
 youtube-chapters.sh *.flac > chapters
