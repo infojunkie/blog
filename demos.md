@@ -11,7 +11,7 @@ Here are some music demos that I am proud-ish to exhibit. Clicking each screensh
 
     {% include demo.html url="https://blog.karimratib.me/demos/musicxml/" image="irealpro-musicxml" alt="iReal Pro to MusicXML" title="A demo app for converting iReal Pro leadsheets into MusicXML and rendering them as playable sheet music." %}
 
-    {% include demo.html url="https://blog.karimratib.me/demos/drumkit/" image="drumkit" alt="Drumkit" title="A demo app for an offline-first, mobile-based percussion instrument." %}
+    {% include demo.html url="https://blog.karimratib.me/demos/drumkit/" image="drumkit" alt="Drumkit" title="A demo app for an offline-first, mobile-based percussion instrument. UI was borrowed from elsewhere but the functionality and code were completely rewritten." %}
 
     {% include demo.html url="https://blog.karimratib.me/demos/sheetdex/" image="sheetdex" alt="Sheetdex" title="A sheet music index created from various online sources." %}
 
