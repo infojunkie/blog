@@ -27,3 +27,28 @@ table.changelog {
 .nowrap {
   white-space: nowrap;
 }
+
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-gap: 10px;
+  background-color: #fff;
+  color: #444;
+}
+
+.grid-box {
+  background-color: #424242;
+  color: #fff;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 150%;
+
+  figcaption {
+    padding-top: 5px;
+    display: block;
+  }
+}
+@media (max-width: 600px) {
+  .grid-wrapper { grid-template-columns: 100%; }
+}
+

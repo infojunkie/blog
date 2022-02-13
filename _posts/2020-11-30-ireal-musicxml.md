@@ -5,7 +5,7 @@ date: 2020-11-30
 ---
 {% include changelog.html changes="Jan 14, 2021 | Further description of iReal Pro playback emulation " %}
 
-Yesterday, I finally published an [online demo of my iReal Pro to MusicXML converter (unimaginatively called `ireal-musicxml`)](https://ethereum.karimratib.me:8082/), having spent around 300% of the time I had originally anticipated to reach the first release of this module. In this post, I hope to summarize the challenges, lessons learned, as well as the context around this work.
+Yesterday, I finally published an [online demo of my iReal Pro to MusicXML converter (unimaginatively called `ireal-musicxml`)](https://blog.karimratib.me/demos/musicxml/), having spent around 300% of the time I had originally anticipated to reach the first release of this module. In this post, I hope to summarize the challenges, lessons learned, as well as the context around this work.
 
 <!--more-->
 
@@ -78,7 +78,7 @@ MusicXML is a complex, ambitious and constantly evolving format that aims at cap
 
 ## Next steps and the larger vision
 
-As my conversion module reaches an operational (but far from complete or robust) stage, I am ready to focus on the next step of my larger vision of an [open suite of Web-based tools that help musicians collaborate around sheet music](https://github.com/users/infojunkie/projects/2), which I prefer to keep vague at the moment, until the details crystallize organically. The next step will ensure that OSMD fully renders the generated MusicXML, in preparation for step 3 where a Web-based music player is added to the mix. A few years ago, I had created a [demo of this playback capability](https://ethereum.karimratib.me:8080/), and I intend to refine my earlier approach when the time comes. Of course, I will be maintaining and updating `ireal-musicxml` along with the other building blocks.
+As my conversion module reaches an operational (but far from complete or robust) stage, I am ready to focus on the next step of my larger vision of an [open suite of Web-based tools that help musicians collaborate around sheet music](https://github.com/users/infojunkie/projects/2), which I prefer to keep vague at the moment, until the details crystallize organically. The next step will ensure that OSMD fully renders the generated MusicXML, in preparation for step 3 where a Web-based music player is added to the mix. A few years ago, I had created a [demo of this playback capability](https://blog.karimratib.me/demos/sheetplayer/), and I intend to refine my earlier approach when the time comes. Of course, I will be maintaining and updating `ireal-musicxml` along with the other building blocks.
 
 This blog does not yet allow comments (mainly because I don't want to use a closed-content commenting service and I'd rather focus on the music tech), but if you are interested in `ireal-musicxml` or the larger vision of a Web-based music notebook, I'd love to hear from you! Feel free to [email me](mailto:karim.ratib@gmail.com) or [open issues on the relevant repo](https://github.com/infojunkie/ireal-musicxml/issues).
 
