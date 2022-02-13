@@ -3,7 +3,7 @@ layout: page
 title: demos
 permalink: /demos/
 ---
-Here are some music demos that I am proud-ish to exhibit. Clicking each screenshot will take you to the actual demo page.
+Here are some music demos that I am proud-ish to exhibit. Click a screenshot to open the demo page.
 
 <div class="grid-wrapper">
 
