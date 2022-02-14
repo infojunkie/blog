@@ -20,3 +20,7 @@ Here are some music demos that I am proud-ish to exhibit. Click a screenshot to 
     {% include demo.html url="https://observablehq.com/@infojunkie/tuning-diagram" image="tuning-diagram" alt="Tuning Diagram" title="An Observable notebook to visualize tunings as circular diagrams." %}
 
 </div>
+
+{% if site.isso.path %}
+    {% include isso.html %}
+{% endif %}
