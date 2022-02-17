@@ -11,7 +11,7 @@ I'm also a lifelong music fan, learner and player. This will often show up in my
 
 <div style="border: 1px solid grey; padding: 5px; margin-bottom: 5px;">
 
-  <b>If you've got some interesting music app projects, I'd love to hear from you!</b> I have good experience (including professional work) with Web Audio, Web MIDI, MusicXML, and lots of music theory. You can [check my music demos here](https://blog.karimratib.me/demos/).
+  <b>If you've got some interesting music app projects, I'd love to <a href="mailto:karim.ratib@gmail.com?subject=Music%20project">hear from you</a>!</b> I have good experience (including professional work) with Web Audio, Web MIDI, MusicXML, and lots of music theory. You can <a href="/demos">check my music demos here</a>.
 
 </div>
 
