@@ -28,6 +28,7 @@ plugins:
   - jemoji
   - jekyll-seo-tag
   - jekyll-extlinks
+  - jekyll-remote-include
 exclude:
   - Gemfile
   - Gemfile.lock

@@ -30,4 +30,5 @@ group :jekyll_plugins do
    gem "jekyll-fontawesome-svg", '~> 0.3.4'
    gem "jekyll-seo-tag"
    gem "jekyll-extlinks"
+   gem "jekyll-remote-include"
 end
