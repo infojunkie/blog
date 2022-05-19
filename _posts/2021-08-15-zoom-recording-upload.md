@@ -81,4 +81,221 @@ Since deployment in May 2021, this system has handled thousands of video files w
 
 Here's the full listing of the relevant code - note that I extracted and simplified it from its original context and did not test it further, so some assembly may be required. Enjoy!
 
-<script src="https://gist.github.com/infojunkie/704508f9c0a55999f9b1418844e02682.js"></script>
+```yaml
+# serverless.yml
+#
+service: labyrinth-service
+
+provider:
+  name: aws
+  iamManagedPolicies:
+    - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+      Resource:
+        - "*"
+
+functions:
+  # Responsible for receiving Zoom webhook and invoking ZoomUploadAsync
+  zoomUpload:
+    handler: zoomUpload.handler
+    events:
+      - http:
+          path: /media/zoom
+          method: post
+    environment:
+      STAGE: "${self:custom.stage}"
+      REGION: "${self:custom.region}"
+
+  # Responsible for uploading Zoom video to watch bucket
+  zoomUploadAsync:
+    handler: zoomUploadAsync.handler
+    timeout: 120
+    environment:
+      DESTINATION_BUCKET: "${self:custom.uploadBucketName}"
+      ZOOM_API_KEY: "${self:custom.secretParams.ZOOM_API_KEY}"
+      ZOOM_API_SECRET: "${self:custom.secretParams.ZOOM_API_SECRET}"
+```
+
+```javascript
+// zoomUpload.js
+//
+exports.handler = async (event, context) => {
+  try {
+    const phScript = new ZoomUpload({ event, context });
+    return await phScript.main();
+  } catch (e) {
+    throw e;
+  }
+};
+
+const AWS = require('aws-sdk');
+const _ = require('lodash');
+const { inspect } = require('util');
+
+class ZoomUpload {
+  constructor(props = {}) {
+    this._event = props.event;
+    this._data = JSON.parse(this._event.body||'{}');
+  }
+
+  async main() {
+    // TODO Verify Zoom `authorization` header as per https://marketplace.zoom.us/docs/api-reference/webhook-reference#headers
+    if (this._data.event !== 'recording.completed') {
+      console.warn(`Received Zoom event ${this._data.event}. Ignoring.`);
+      return;
+    }
+    const code = this.getCourseCode();
+    if (!code) {
+      console.warn(`Could not find course code in meeting "${this._data.payload.object.topic}". Ignoring.`);
+      return;
+    }
+    const videos = this.getVideoFiles();
+    if (!videos.length) {
+      console.warn(`Could not find any eligible video in meeting "${this._data.payload.object.topic}". Ignoring.`);
+      return;
+    }
+
+    const fn = `labyrinth-service-${process.env['STAGE']}-zoomUploadAsync`;
+    for (const video of videos) {
+      try {
+        await this.invokeLambda(fn, video, code);
+      }
+      catch (error) {
+        console.error(`Error occurred while invoking upload function ${fn} for meeting "${this._data.payload.object.topic}": ${error}`);
+      }
+    }
+  }
+
+  async invokeLambda(fn, video, code) {
+    return new Promise((resolve, reject) => {
+      const lambda = new AWS.Lambda({ region: process.env['REGION'] });
+      lambda.invoke({ FunctionName: fn, InvocationType: 'Event', Payload: JSON.stringify({
+        topic: this._data.payload.object.topic,
+        code,
+        video
+      })}, (error, result) => {
+        if (error) {
+          reject(error);
+        }
+        else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  // Detect if this is a course meeting having a [code123] substring.
+  getCourseCode() {
+    const code = _.get(this._data, 'payload.object.topic', '').match(/\[(\w+)\]/);
+    return code && code[1];
+  }
+
+  // Detect video files that we want to upload.
+  getVideoFiles() {
+    return _.get(this._data, 'payload.object.recording_files', []).filter(file => {
+      const start = new Date(file.recording_start);
+      const end = new Date(file.recording_end);
+      // Return mp4 videos with running time >= 2min
+      return file.file_type.toUpperCase() === "MP4"
+          && end - start >= 1000*60*2
+    });
+  }
+}
+```
+```javascript
+// zoomUploadAsync.js
+//
+ports.handler = async (event, context) => {
+  try {
+    const phScript = new ZoomUploadAsync({ event, context });
+    return await phScript.main();
+  } catch (e) {
+    throw e;
+  }
+};
+
+const fetch = require('node-fetch');
+const jwt = require('jsonwebtoken');
+const AWS = require('aws-sdk');
+const _ = require('lodash');
+const { inspect } = require('util');
+
+// https://stackoverflow.com/a/10075654/209184
+function padDigits(number, digits) {
+    return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
+}
+
+const PREFIX = 'courses/uploads';
+
+class ZoomUploadAsync {
+  constructor(props = {}) {
+    this._event = props.event;
+  }
+
+  async main() {
+    const video = this._event.video;
+    try {
+      await this.uploadZoomToS3(
+        video.download_url,
+        video.file_size,
+        this.recordingTofilename(),
+        `${PREFIX}/${this._event.code}`
+      );
+    }
+    catch (error) {
+      console.error(`Error occurred while uploading video at ${video.play_url} for meeting "${this._event.topic}": ${error}`);
+    }
+  }
+
+  async uploadZoomToS3(zoomDownloadUrl, size, fileName, prefix) {
+    const zoomToken = this.generateZoomToken();
+    return new Promise((resolve, reject) => {
+      fetch(`${zoomDownloadUrl}?access_token=${zoomToken}`, {
+        method: 'GET',
+        redirect: 'follow'
+      })
+      .then(response => {
+        const s3 = new AWS.S3();
+        const request = s3.putObject({
+          Bucket: process.env['DESTINATION_BUCKET'],
+          Key: `${prefix}/${fileName}`,
+          Body: response.body,
+          ContentType: 'video/mp4',
+          ContentLength: size || Number(response.headers.get('content-length'))
+        });
+        return request.promise();
+      })
+      .then(data => {
+        console.log(`Successfully uploaded ${fileName} to ${prefix}.`);
+        resolve(data);
+      });
+    });
+  }
+
+  generateZoomToken() {
+    const zoomPayload = {
+      iss: process.env['ZOOM_API_KEY'],
+      exp: ((new Date()).getTime() + 5000)
+    };
+    return jwt.sign(zoomPayload, process.env['ZOOM_API_SECRET']);
+  }
+
+  recordingTofilename() {
+    // GMT20210429_165119_Recording.mp4
+    const video = this._event.video;
+    const date = new Date(video.recording_start);
+    return 'GMT' +
+           date.getUTCFullYear() +
+           padDigits(date.getUTCMonth()+1, 2) +
+           padDigits(date.getUTCDate(), 2) +
+           '_' +
+           padDigits(date.getUTCHours(), 2) +
+           padDigits(date.getUTCMinutes(), 2) +
+           padDigits(date.getUTCSeconds(), 2) +
+           '_Recording.mp4';
+  }
+}
+```

@@ -48,7 +48,11 @@ table.changelog {
     display: block;
   }
 }
+
 @media (max-width: 600px) {
   .grid-wrapper { grid-template-columns: 100%; }
 }
 
+.icon {
+  @extend .svg-icon
+}

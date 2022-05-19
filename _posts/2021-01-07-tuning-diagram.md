@@ -14,7 +14,7 @@ It is in this spirit that I was motivated to create a [Web Audio experiment](htt
 
 Later, I came across beautiful circular diagrams representing musical rhythms, as pioneered by [Godfried Toussaint](http://cgm.cs.mcgill.ca/~godfried/rhythm-and-mathematics.html). The clarity of these diagrams inspired me to recreate them for musical tunings, which also exhibit periodicity. Here's the result, using Mike Bostock's excellent Observable platform. You can click the notes to hear them:
 
-<iframe width="100%" height="700" frameborder="0"
+<iframe width="100%" height="700" frameborder="0" style="background:#bbb;"
   src="https://observablehq.com/embed/@infojunkie/tuning-diagram?cell=chart"></iframe>
 
 ## A quick introduction to the mathematics of tuning
