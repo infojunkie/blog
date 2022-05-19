@@ -1,17 +1,12 @@
 This is a [Jekyll](https://jekyllrb.com/) blog. To build:
 ```
-bundle install 
+bundle install
 bundle exec jekyll build
 ```
 To develop locally:
 ```
 bundle exec jekyll serve
 ```
-To render Facebook/Instagram posts using oEmbed:
-- Obtain a [Facebook oEmbed access token](https://developers.facebook.com/docs/plugins/oembed)
-- Save `.env.example` as `.env`, with the access token above
-- `source .env`
-
 I use [Isso](https://posativ.org/isso/) for comments. Here are the steps to set it up:
 - Create a [server config file](https://posativ.org/isso/docs/configuration/server/) - start from the [example](https://github.com/posativ/isso/blob/master/share/isso.conf) and rename to `isso.cfg`!
 - [Build and run the Docker image](https://posativ.org/isso/docs/install/#build-a-docker-image)
