@@ -3,6 +3,8 @@ layout: post
 title: How to prepare your Web application for Web MIDI on Firefox
 date: 2022-04-23
 ---
+{% include changelog.html changes="Nov 20, 2022 | OBSOLETE! Firefox no longer requires the complicated process outlined below to enable Web MIDI and now behaves like Chrome does. I am only keeping this post for posterity." %}
+
 In this note, I explain the process of preparing your Web application to use Wed MIDI API on Firefox, because this process is different from Chrome and involves a few more steps that may be counter-intuitive or surprising. I include screenshots and code snippets from my own app.
 
 <!--more-->
