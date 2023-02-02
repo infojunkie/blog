@@ -7,7 +7,12 @@ I thought I was done with Drupal in 2016 when we rebuilt [Meedan's fact-checking
 
 But I was hired again for my Drupal expertise in 2022. For the past 8 months, I've been working on a massive site refresh using Drupal 9, and I must admit that, against my expectations, I really enjoyed working on this platform. I found Drupal 8/9+ to be a real step forward in terms of developer experience compared to previous versions, particularly well-suited to build large web sites.
 
-But I won't get into the top 10 reasons I like Drupal 9. In this post, I will list a few interesting snippets that I developed over the course of this project.
+But I won't get into the top 10 reasons I like Drupal 9. In this post, I will list a few interesting snippets that I developed over the course of this project:
+
+- [Showing an export link for each manually updated config item](#showing-an-export-link-for-each-manually-updated-config-item)
+- [Backup and Migrate: PostgreSQL support](#backup-and-migrate-postgresql-support)
+- [Backup and Migrate: Drupal 9 / Drush 11 support](#backup-and-migrate-drupal-9--drush-11-support)
+- [Fixing Google Charts rendering in tabbed pages](#fixing-google-charts-rendering-in-tabbed-pages)
 
 ## Showing an export link for each manually updated config item
 The Configuration API is by far the best surprise I had about Drupal 9. Finally, a core system that is robust enough to hold any configuration set reliably, and extensible enough for contrib modules. Back in Drupal 7-, maintaining a consistent configuration across stages had been the bane of my existence, and I was delighted to find it was now a solved problem.
@@ -430,5 +435,4 @@ index f7abe81..76143bc 100755
      };
    };
 ```
-
 I might dig up more snippets later - for now, happy coding! :cat: :computer:
