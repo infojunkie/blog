@@ -31,6 +31,8 @@ My quick solution was to add an **Export config** action for each updated item i
 {% include image.html url="/assets/drupal-config-export.png" width="100%" %}
 
 ```php
+use Drupal\Core\Config\Entity\ConfigEntityInterface;
+
 /**
  * Implements hook_form_FORM_ID_alter() for config_admin_import_form.
  *
