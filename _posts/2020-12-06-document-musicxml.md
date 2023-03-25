@@ -15,7 +15,7 @@ Using the standard [`xsltproc` console tool](http://xmlsoft.org/XSLT/), I simply
 ```
 xsltproc /path/to/xs3p/xs3p.xsl /path/to/musicxml-3.1/schema/musicxml.xsd > musicxml.html
 ```
-and obtained [an HTML version of the full MusicXML schema definition]({% link /musicxml.html %}) in no time flat! :tada:
+and obtained [an HTML version of the full MusicXML schema definition]({% link musicxml.md %}) in no time flat! :tada:
 
 ## Pros
 - One-line transformation process means easy automation
