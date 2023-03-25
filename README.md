@@ -9,7 +9,7 @@ bundle exec jekyll serve
 ```
 I use [Isso](https://posativ.org/isso/) for comments. Here are the steps to set it up:
 - Create a [server config file](https://posativ.org/isso/docs/configuration/server/) - start from the [example](https://github.com/posativ/isso/blob/master/share/isso.conf) and rename to `isso.cfg`!
-- [Build and run the Docker image](https://posativ.org/isso/docs/install/#build-a-docker-image)
+- [Build and run the Docker image](https://isso-comments.de/docs/reference/installation/#using-docker)
 - Wire it into the `nginx` server config:
 ```
     location /isso {
