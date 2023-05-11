@@ -208,7 +208,7 @@ class ZoomUpload {
 ```javascript
 // zoomUploadAsync.js
 //
-ports.handler = async (event, context) => {
+exports.handler = async (event, context) => {
   try {
     const phScript = new ZoomUploadAsync({ event, context });
     return await phScript.main();
