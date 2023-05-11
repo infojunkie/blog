@@ -24,7 +24,7 @@ Unfortunately, the shape of the payload received by the Zoom trigger was too com
 # Moving to AWS Lambda
 I regretfully abandoned the Zapier approach, and decided to bite the bullet and write new code to perform my function. For deployment simplicity, I chose to write it using the [serverless Node.js framework](https://www.serverless.com/) and to host it on AWS Lambda.
 
-The Zoom API provides webhook notifications about events in a Zoom account. To setup a webhook integration, I created a Zoom Marketplace app of type JWT (JSON Web Token) and added to it an event subscription for the [Recording Completed event](https://marketplace.zoom.us/docs/api-reference/webhook-reference/recording-events/recording-completed). Each event subscription accepts a single webhook endpoint, which is the URL of the AWS Lambda HTTP endpoint.
+The Zoom API provides webhook notifications about events in a Zoom account. To setup a webhook integration, I created a Zoom Marketplace app of type JWT (JSON Web Token) and added to it an event subscription for the [Recording Completed event](https://developers.zoom.us/docs/api/rest/reference/zoom-api/events/#operation/recording.completed). Each event subscription accepts a single webhook endpoint, which is the URL of the AWS Lambda HTTP endpoint.
 
 The plan of the function is thus:
 - Upon reception of the webhook:
