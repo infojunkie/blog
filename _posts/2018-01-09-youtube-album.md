@@ -17,7 +17,9 @@ Requires: `imagemagick ffmpeg metaflac sox`
 
 If you have just one cover image to show, and you want one video file per track, you can take the following shortcut:
 
-```for f in *.flac; do ffmpeg -loop 1 -i cover.png -i "$f" -shortest -codec:v libx264 -crf 21 -bf 2 -flags +cgop -pix_fmt yuv420p -codec:a aac -strict -2 -b:a 384k -r:a 48000 -movflags faststart "${f/.flac/.mp4}"; done```
+```bash
+for f in *.flac; do ffmpeg -loop 1 -i cover.png -i "$f" -shortest -codec:v libx264 -crf 21 -bf 2 -flags +cgop -pix_fmt yuv420p -codec:a aac -strict -2 -b:a 384k -r:a 48000 -movflags faststart "${f/.flac/.mp4}"; done
+```
 
 Otherwise, read on:
 
