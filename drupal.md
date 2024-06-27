@@ -1,4 +1,4 @@
 ---
-title: drupal posts
+title: drupal
 layout: category
 ---

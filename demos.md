@@ -1,6 +1,6 @@
 ---
 layout: page
-title: music demos
+title: music
 permalink: /demos/
 ---
 Here are some music demos that I am proud-ish to exhibit. Click a screenshot to open the demo page.
