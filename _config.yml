@@ -21,8 +21,14 @@ description: > # this means to ignore newlines until "baseurl:"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://blog.karimratib.me" # the base hostname & protocol for your site, e.g. http://example.com
 excerpt_separator: <!--more-->
-
-# Build settings
+permalink: /:year/:month/:day/:title:output_ext
+feed:
+  categories:
+    - drupal
+header_pages:
+  - about.md
+  - drupal.md
+  - demos.md
 markdown: kramdown
 theme: minima
 plugins:
