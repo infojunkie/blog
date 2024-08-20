@@ -4,7 +4,7 @@ title: "Drupal 10: From cookies to user sessions"
 date: 2024-08-20
 category: drupal
 ---
-When you need to examine user session tokens, you know you're deep in the bowels of the CMS. That's what happened to me recently, as I was debugging why CloudFlare was mixing up user sessions and giving admin access to otherwise unpermissioned users :fear:
+When you need to examine user session tokens, you know you're deep in the bowels of the CMS. That's what happened to me recently, as I was debugging why CloudFlare was mixing up user sessions and giving admin access to otherwise unpermissioned users :scream:
 
 To help debug this, I needed a way to associate user cookies with entries from the `sessions` table. I wrote a drush script to do exactly that: Given the value of the SESSXXX cookie in your browser, the script will find the corresponding `sessions` entry and dump its information, decoding the session metadata in the process:
 ```bash
