@@ -17,7 +17,7 @@ Drupal\Core\Form\EnforcedResponseException: in Drupal\Core\Form\FormBuilder->bui
 ```
 
 ## Solution 1: Applying the patch
-The [relevant bug report](https://www.drupal.org/project/drupal/issues/3304746) has a patch that worked for me. I had to apply the patch manully to Drupal 9.x (please, don't shoot me because I'm not in charge of our Drupal update schedule!!) but the code changes are exactly the same.
+The [relevant bug report](https://www.drupal.org/project/drupal/issues/3304746) has a patch that worked for me. I had to apply the patch manually to Drupal 9.x (please, don't shoot me because I'm not in charge of our Drupal update schedule!!) but the code changes are exactly the same.
 
 When you apply this patch, the Reset button works again. But clumsily: First, you see the URL changing to your current filters followed by `&op=Reset`, then the browser redirects to the page's bare URL, thereby resetting the filters. This is of course a consequence of using BigPipe, which optimizes page rendering by returning all cached blocks first, and deferring uncacheable blocks to be requested by the front-end. A marvel of engineering by **Wim Leers**! Still, the flickering leaves to be desired.
 
