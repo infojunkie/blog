@@ -7,11 +7,9 @@ date: 2018-01-09
 
 YouTube is a great way to quickly disseminate obscure, long-tail music albums that carry cultural significance. As long as you remain under the radar of our friends at the music labels, of course :wink:
 
-Here's a recipe to prepare audio files for YouTube upload. The video is a looping slideshow of the images contained in the album's artwork. Here's a couple of examples of this recipe's output:
+Here's a recipe to prepare audio files for YouTube upload. The video is a looping slideshow of the images contained in the album's artwork. Here's an example of this recipe's output:
 
 {% oembed https://www.youtube.com/watch?v=qjlDT819Q3s %}
-
-{% oembed https://www.youtube.com/watch?v=Lii7NCULPBA %}
 
 Requires: `imagemagick ffmpeg metaflac sox`
 

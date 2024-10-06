@@ -13,7 +13,7 @@ module Jekyll
     def render(context)
       @@cache.getset(@content) do
         begin
-          resource = OEmbed::Providers.get(@content)
+          resource = OEmbed::Providers.get(@content, { :maxwidth => 800, :maxheight => 600 })
           resource.html
         rescue StandardError => e
           Jekyll.logger.error("oEmbed:", "Could not extract oEmbed information from #{@content}: #{e}")
