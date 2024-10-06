@@ -3,6 +3,8 @@ layout: post
 title: "Drupal 9/10: Fix Views Reset button with Big Pipe"
 date: 2024-08-29
 category: drupal
+description: Big Pipe on Drupal 9+ breaks form redirects. In this post, I explain how I fixed it for a specific but common case.
+image: /assets/disable-bigpipe.jpg
 ---
 I was **flabbergasted** to discover that Big Pipe breaks the Views Reset button. In fact, Big Pipe breaks **all** form redirects. Not sure how other Drupal devs feel about that, but this was a big smh moment for me. Just imagine the collective time wasted debugging one's code until one associates this failure to a core module bug!! :facepalm:
 

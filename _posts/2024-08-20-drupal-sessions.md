@@ -3,6 +3,7 @@ layout: post
 title: "Drupal 10: From cookies to user sessions"
 date: 2024-08-20
 category: drupal
+description: In this post, I show a script that relates user cookies to Drupal session information.
 ---
 When you need to examine user session tokens, you know you're deep in the bowels of the CMS. That's what happened to me recently, as I was debugging why CloudFlare was mixing up user sessions and giving admin access to otherwise unpermissioned users :scream:
 
