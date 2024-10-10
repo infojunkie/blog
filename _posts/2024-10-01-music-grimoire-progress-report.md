@@ -55,7 +55,7 @@ This library also includes [`musicxml-grooves`, a tool to convert raw "grooves" 
 {% include image.html url="/assets/JazzBasieA.jpg" width="100%" description="The same pattern as interpreted by <code>musicxml-grooves</code> (without post-editing). This version is more readable than the above because the converter tries hard to quantize the notes to a grid that includes triplets." %}
 
 ## MusicXML to MuseScore
-[MuseScore](https://musescore.org) is one of the few serious open source music writing software ([LilyPond](https://lilypond.org) is another), but it suffers from incomplete MusicXML import/export. I've recently started work on [`musicxml-mscx`, a new library to perform more robust MusicXML conversion to and from the native MuseScore format](https://github.com/infojunkie/musicxml-mscx).
+[MuseScore](https://musescore.org) is one of the few serious open source music writing software, but it suffers from incomplete MusicXML import/export. I've recently started work on [`musicxml-mscx`, a new library to perform more robust MusicXML conversion to and from the native MuseScore format](https://github.com/infojunkie/musicxml-mscx).
 
 {% include image.html url="/assets/tutorial-apres-un-reve.finale.jpg" width="100%" description="The original score, converted to MusicXML by Finale." %}
 
@@ -93,7 +93,7 @@ Answering these questions is the reason why I am still motivated to go on! Over 
 
 - Chris Wilson's [A tale of two clocks](https://web.dev/articles/audio-scheduling), the seminal article about robust Web audio sequencing.
 
-{% include image.html description="A wonderfully explanatory diagram that captures the essence of the article." width="100%" url="/assets/a-tale-of-two-clocks.png" %}
+{% include image.html description="A wonderfully explanatory diagram that captures the essence of the technique." width="100%" url="/assets/a-tale-of-two-clocks.png" %}
 
 I've been fortunate to work with others who are interested in this domain: A year ago, I was sponsored to add a "horizontal scrolling" mode to the player, as well as a method to synchronize the playback with a YouTube video (hint: it uses the [Timing Object W3C draft specification](https://webtiming.github.io/timingobject/)) - both of which went back into `musicxml-player`. Today, I am exploring adding multiplayer capability to the player, also using Web standards. I'm also fortunate to interact with like-minded developers, like [Christoph Guttandin](https://media-codings.com/) who maintains a dizzying array of well-crafted audio modules - we collaborate on his excellent [`midi-player` component](https://github.com/chrisguttandin/midi-player) which is a cornerstone of `musicxml-player`. Since the early days, I've been in touch with [Bob van del Poel](https://www.mellowood.ca), a fellow British Columbian who wrote the ridiculously great [Musical MIDI Accompaniment (MMA)](https://www.mellowood.ca/mma/) system which is a cornerstone of `musicxml-midi`.
 
