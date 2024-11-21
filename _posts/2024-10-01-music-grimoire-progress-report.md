@@ -4,7 +4,7 @@ title: "Music Grimoire: A progress report"
 date: 2024-10-01
 category: music
 description: In this post, I present a summary of the music ecosystem I've been working on for the past 7 years.
-image: /assets/music-workflow.svg
+image: /assets/music-workflow.png
 ---
 About 7 years ago, I had a flash of insight: Music software is strongly biased towards Western mainstream music, and most tools are programmed with the "axioms" of this music as their foundation. Things like 12 notes per octave, tuned to intervals that are specific to the 12-TET tuning, with predefined scales and modes - these are hard-coded into the lowest layers of most music software and make it almost impossible to express musical ideas outisde this framework.
 
