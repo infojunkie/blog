@@ -30,7 +30,7 @@ The general workflow I have in mind for music publishing involves the following 
 - Load MusicXML in a Web player for display using existing components such as [OSMD](https://opensheetmusicdisplay.org), [Verovio](https://verovio.org), etc.
 - Play MIDI in the Web player via Web MIDI or Web Audio using existing components such as [Tone.js](https://tonejs.github.io/), [WebAudioFont](https://surikov.github.io/webaudiofont/), etc.
 
-{% include image.html url="/assets/music-workflow.svg" width="100%" description="The general music workflow from score production to playback." %}
+{% include image.html url="/assets/music-workflow-dark.svg" width="100%" description="The general music workflow from score production to playback with associated GitHub repos." %}
 
 What follows is a quick overview of the tools that I am maintaining to support this workflow.
 
