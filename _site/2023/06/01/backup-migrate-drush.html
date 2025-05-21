@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <style>
+    .no-js {
+      visibility: visible !important;
+    }
+  </style>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Drupal 9: Backup and Migrate - Drush 11 support</title>
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="https://blog.karimratib.me/2023/06/01/backup-migrate-drush.html">
+  <link rel="alternate" type="application/rss+xml" title="infojunkie" href="/feed.xml">
+
+  <link rel="shortcut icon" href="/favicon.ico">
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.4.0"></script>
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Drupal 9: Backup and Migrate - Drush 11 support | infojunkie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Drupal 9: Backup and Migrate - Drush 11 support" />
+<meta name="author" content="Karim Ratib" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Supporting content migrations across stages is a tricky subject, and most tools I reviewed seemed too fragile or too complex to be delivered to a client. We opted to use a simple workflow based on BAM (Backup and Migrate) coupled with config re-synchronization. To help automate the process, I wrote a set of drush commands that implement BAM backup and restore. It’s been tested extensively, but only with a specific set of sources and destinations, so I am reproducing the current code here until it gets published as a module. One design decision I made was to produce output as JSON, to make it easier for downstream automation. The typical usage scenario is the following: $ drush bamb default_db private_files // =&gt; { // &quot;status&quot;: &quot;success&quot;, // &quot;message&quot;: &quot;Backup complete.&quot; //} $ drush bamls --files=private_files // =&gt; { // &quot;sources&quot;: [ // { // &quot;id&quot;: &quot;default_db&quot;, // &quot;label&quot;: &quot;Default Drupal Database&quot;, // &quot;type&quot;: &quot;DefaultDB&quot; // }, // { // &quot;id&quot;: &quot;entire_site&quot;, // &quot;label&quot;: &quot;Entire Site (do not use)&quot;, // &quot;type&quot;: &quot;EntireSite&quot; // }, // { // &quot;id&quot;: &quot;private_files&quot;, // &quot;label&quot;: &quot;Private Files Directory&quot;, // &quot;type&quot;: &quot;DrupalFiles&quot; // }, // { // &quot;id&quot;: &quot;public_files&quot;, // &quot;label&quot;: &quot;Public Files Directory&quot;, // &quot;type&quot;: &quot;DrupalFiles&quot; // }, // { // &quot;id&quot;: &quot;ssot_database&quot;, // &quot;label&quot;: &quot;SSoT Database&quot;, // &quot;type&quot;: &quot;PostgreSQL&quot; // } // ], // &quot;destinations&quot;: [ // { // &quot;id&quot;: &quot;private_files&quot;, // &quot;label&quot;: &quot;Private Files Directory&quot;, // &quot;type&quot;: &quot;Directory&quot; // }, // { // &quot;id&quot;: &quot;s3_bucket&quot;, // &quot;label&quot;: &quot;S3 Bucket&quot;, // &quot;type&quot;: &quot;awss3&quot; // } // ], // &quot;files&quot;: { // &quot;private_files&quot;: [ // { // &quot;id&quot;: &quot;backup-2023-01-27T15-44-19.sql.gz&quot;, // &quot;filename&quot;: &quot;prod-2023-01-27T15-44-19.sql.gz&quot;, // &quot;filesize&quot;: 19499222, // &quot;datestamp&quot;: 1674869134 // } // ] // } //} $ drush bamr default_db private_files backup-2023-01-27T15-44-19.sql.gz // =&gt; { // &quot;status&quot;: &quot;success&quot;, // &quot;message&quot;: &quot;Restore complete.&quot; //} And here’s the source for the command: &lt;?php namespace Drush\Commands; use Drush\Drush; use Drush\Commands\DrushCommands; use Drush\Boot\DrupalBootLevels; use Drupal\backup_migrate\Core\Destination\ListableDestinationInterface; use Symfony\Component\Console\Input\InputOption; class BackupMigrateCommands extends DrushCommands { /** * List sources and destinations. * * @command backup_migrate:list * @aliases bamls * * @option sources Flag to list sources (default: yes, use --no-sources to hide) * @option destinations Flag to list destinations (default: yes, use --no-destinations to hide) * @option files Flag to list files for a comma-separated list of destination identifiers (default: none) * * @param options * * @return string JSON listing of sources, destinations, files * */ public function list(array $options = [ &#39;sources&#39; =&gt; true, &#39;destinations&#39; =&gt; true, &#39;files&#39; =&gt; InputOption::VALUE_REQUIRED, ]): string { Drush::bootstrapManager()-&gt;doBootstrap(DrupalBootLevels::FULL); $bam = \backup_migrate_get_service_object(); $output = []; if ($options[&#39;sources&#39;]) { $output[&#39;sources&#39;] = array_reduce(array_keys($bam-&gt;sources()-&gt;getAll()), function($sources, $source_id) { $source = \Drupal::entityTypeManager()-&gt;getStorage(&#39;backup_migrate_source&#39;)-&gt;load($source_id); if ($source) { $sources[] = [ &#39;id&#39; =&gt; $source_id, &#39;label&#39; =&gt; $source-&gt;get(&#39;label&#39;), &#39;type&#39; =&gt; $source-&gt;get(&#39;type&#39;), ]; } return $sources; }, []); } if ($options[&#39;destinations&#39;]) { $output[&#39;destinations&#39;] = array_reduce(array_keys($bam-&gt;destinations()-&gt;getAll()), function($destinations, $destination_id) { $destination = \Drupal::entityTypeManager()-&gt;getStorage(&#39;backup_migrate_destination&#39;)-&gt;load($destination_id); if ($destination) { $destinations[] = [ &#39;id&#39; =&gt; $destination_id, &#39;label&#39; =&gt; $destination-&gt;get(&#39;label&#39;), &#39;type&#39; =&gt; $destination-&gt;get(&#39;type&#39;), ]; } return $destinations; }, []); } if ($options[&#39;files&#39;]) { foreach(array_map(&#39;trim&#39;, explode(&#39;,&#39;, $options[&#39;files&#39;])) as $destination_id) { $destination = $bam-&gt;destinations()-&gt;get($destination_id); if (!$destination) { $this-&gt;logger()-&gt;warning(dt(&#39;The destination !id does not exist.&#39;, [&#39;!id&#39; =&gt; $destination_id])); continue; } if (!$destination instanceof ListableDestinationInterface) { $this-&gt;logger()-&gt;warning(dt(&#39;The destination !id is not listable.&#39;, [&#39;!id&#39; =&gt; $destination_id])); continue; } try { $files = $destination-&gt;listFiles(); $output[&#39;files&#39;][$destination_id] = array_reduce(array_keys($files), function($files_info, $file_id) use($files) { $files_info[] = array_merge([ &#39;id&#39; =&gt; $file_id, &#39;filename&#39; =&gt; $files[$file_id]-&gt;getFullName(), ], $files[$file_id]-&gt;getMetaAll()); return $files_info; }, []); usort($output[&#39;files&#39;][$destination_id], function($file1, $file2) { // TODO What if datestamp is not available? $a = $file1[&#39;datestamp&#39;]; $b = $file2[&#39;datestamp&#39;]; if ($a == $b) return 0; return ($a &lt; $b) ? -1 : 1; }); } catch (\Exception $e) { $this-&gt;logger()-&gt;error(dt(&#39;The destination !id caused an error: !error&#39;, [ &#39;!id&#39; =&gt; $destination_id, &#39;!error&#39; =&gt; $e-&gt;getMessage() ])); } } } return json_encode($output, JSON_PRETTY_PRINT); } /** * Backup. * * @command backup_migrate:backup * @aliases bamb * * @param source_id Identifier of the Backup Source. * @param destination_id Identifier of the Backup Destination. * * @return string Backup completion status * * @throws \Drupal\backup_migrate\Core\Exception\BackupMigrateException * */ public function backup( $source_id, $destination_id ): string { Drush::bootstrapManager()-&gt;doBootstrap(DrupalBootLevels::FULL); $bam = \backup_migrate_get_service_object(); $bam-&gt;backup($source_id, $destination_id); return json_encode([ &#39;status&#39; =&gt; &#39;success&#39;, &#39;message&#39; =&gt; dt(&#39;Backup complete.&#39;) ], JSON_PRETTY_PRINT); } /** * Restore. * * @command backup_migrate:restore * @aliases bamr * * @param source_id Identifier of the Backup Source. * @param destination_id Identifier of the Backup Destination. * @param file_id optional Identifier of the Destination file. * * @return string Restore completion status * * @throws \Drupal\backup_migrate\Core\Exception\BackupMigrateException * */ public function restore( $source_id, $destination_id, $file_id = null, ): string { Drush::bootstrapManager()-&gt;doBootstrap(DrupalBootLevels::FULL); $bam = \backup_migrate_get_service_object(); $bam-&gt;restore($source_id, $destination_id, $file_id); return json_encode([ &#39;status&#39; =&gt; &#39;success&#39;, &#39;message&#39; =&gt; dt(&#39;Restore complete.&#39;) ], JSON_PRETTY_PRINT); } }" />
+<meta property="og:description" content="Supporting content migrations across stages is a tricky subject, and most tools I reviewed seemed too fragile or too complex to be delivered to a client. We opted to use a simple workflow based on BAM (Backup and Migrate) coupled with config re-synchronization. To help automate the process, I wrote a set of drush commands that implement BAM backup and restore. It’s been tested extensively, but only with a specific set of sources and destinations, so I am reproducing the current code here until it gets published as a module. One design decision I made was to produce output as JSON, to make it easier for downstream automation. The typical usage scenario is the following: $ drush bamb default_db private_files // =&gt; { // &quot;status&quot;: &quot;success&quot;, // &quot;message&quot;: &quot;Backup complete.&quot; //} $ drush bamls --files=private_files // =&gt; { // &quot;sources&quot;: [ // { // &quot;id&quot;: &quot;default_db&quot;, // &quot;label&quot;: &quot;Default Drupal Database&quot;, // &quot;type&quot;: &quot;DefaultDB&quot; // }, // { // &quot;id&quot;: &quot;entire_site&quot;, // &quot;label&quot;: &quot;Entire Site (do not use)&quot;, // &quot;type&quot;: &quot;EntireSite&quot; // }, // { // &quot;id&quot;: &quot;private_files&quot;, // &quot;label&quot;: &quot;Private Files Directory&quot;, // &quot;type&quot;: &quot;DrupalFiles&quot; // }, // { // &quot;id&quot;: &quot;public_files&quot;, // &quot;label&quot;: &quot;Public Files Directory&quot;, // &quot;type&quot;: &quot;DrupalFiles&quot; // }, // { // &quot;id&quot;: &quot;ssot_database&quot;, // &quot;label&quot;: &quot;SSoT Database&quot;, // &quot;type&quot;: &quot;PostgreSQL&quot; // } // ], // &quot;destinations&quot;: [ // { // &quot;id&quot;: &quot;private_files&quot;, // &quot;label&quot;: &quot;Private Files Directory&quot;, // &quot;type&quot;: &quot;Directory&quot; // }, // { // &quot;id&quot;: &quot;s3_bucket&quot;, // &quot;label&quot;: &quot;S3 Bucket&quot;, // &quot;type&quot;: &quot;awss3&quot; // } // ], // &quot;files&quot;: { // &quot;private_files&quot;: [ // { // &quot;id&quot;: &quot;backup-2023-01-27T15-44-19.sql.gz&quot;, // &quot;filename&quot;: &quot;prod-2023-01-27T15-44-19.sql.gz&quot;, // &quot;filesize&quot;: 19499222, // &quot;datestamp&quot;: 1674869134 // } // ] // } //} $ drush bamr default_db private_files backup-2023-01-27T15-44-19.sql.gz // =&gt; { // &quot;status&quot;: &quot;success&quot;, // &quot;message&quot;: &quot;Restore complete.&quot; //} And here’s the source for the command: &lt;?php namespace Drush\Commands; use Drush\Drush; use Drush\Commands\DrushCommands; use Drush\Boot\DrupalBootLevels; use Drupal\backup_migrate\Core\Destination\ListableDestinationInterface; use Symfony\Component\Console\Input\InputOption; class BackupMigrateCommands extends DrushCommands { /** * List sources and destinations. * * @command backup_migrate:list * @aliases bamls * * @option sources Flag to list sources (default: yes, use --no-sources to hide) * @option destinations Flag to list destinations (default: yes, use --no-destinations to hide) * @option files Flag to list files for a comma-separated list of destination identifiers (default: none) * * @param options * * @return string JSON listing of sources, destinations, files * */ public function list(array $options = [ &#39;sources&#39; =&gt; true, &#39;destinations&#39; =&gt; true, &#39;files&#39; =&gt; InputOption::VALUE_REQUIRED, ]): string { Drush::bootstrapManager()-&gt;doBootstrap(DrupalBootLevels::FULL); $bam = \backup_migrate_get_service_object(); $output = []; if ($options[&#39;sources&#39;]) { $output[&#39;sources&#39;] = array_reduce(array_keys($bam-&gt;sources()-&gt;getAll()), function($sources, $source_id) { $source = \Drupal::entityTypeManager()-&gt;getStorage(&#39;backup_migrate_source&#39;)-&gt;load($source_id); if ($source) { $sources[] = [ &#39;id&#39; =&gt; $source_id, &#39;label&#39; =&gt; $source-&gt;get(&#39;label&#39;), &#39;type&#39; =&gt; $source-&gt;get(&#39;type&#39;), ]; } return $sources; }, []); } if ($options[&#39;destinations&#39;]) { $output[&#39;destinations&#39;] = array_reduce(array_keys($bam-&gt;destinations()-&gt;getAll()), function($destinations, $destination_id) { $destination = \Drupal::entityTypeManager()-&gt;getStorage(&#39;backup_migrate_destination&#39;)-&gt;load($destination_id); if ($destination) { $destinations[] = [ &#39;id&#39; =&gt; $destination_id, &#39;label&#39; =&gt; $destination-&gt;get(&#39;label&#39;), &#39;type&#39; =&gt; $destination-&gt;get(&#39;type&#39;), ]; } return $destinations; }, []); } if ($options[&#39;files&#39;]) { foreach(array_map(&#39;trim&#39;, explode(&#39;,&#39;, $options[&#39;files&#39;])) as $destination_id) { $destination = $bam-&gt;destinations()-&gt;get($destination_id); if (!$destination) { $this-&gt;logger()-&gt;warning(dt(&#39;The destination !id does not exist.&#39;, [&#39;!id&#39; =&gt; $destination_id])); continue; } if (!$destination instanceof ListableDestinationInterface) { $this-&gt;logger()-&gt;warning(dt(&#39;The destination !id is not listable.&#39;, [&#39;!id&#39; =&gt; $destination_id])); continue; } try { $files = $destination-&gt;listFiles(); $output[&#39;files&#39;][$destination_id] = array_reduce(array_keys($files), function($files_info, $file_id) use($files) { $files_info[] = array_merge([ &#39;id&#39; =&gt; $file_id, &#39;filename&#39; =&gt; $files[$file_id]-&gt;getFullName(), ], $files[$file_id]-&gt;getMetaAll()); return $files_info; }, []); usort($output[&#39;files&#39;][$destination_id], function($file1, $file2) { // TODO What if datestamp is not available? $a = $file1[&#39;datestamp&#39;]; $b = $file2[&#39;datestamp&#39;]; if ($a == $b) return 0; return ($a &lt; $b) ? -1 : 1; }); } catch (\Exception $e) { $this-&gt;logger()-&gt;error(dt(&#39;The destination !id caused an error: !error&#39;, [ &#39;!id&#39; =&gt; $destination_id, &#39;!error&#39; =&gt; $e-&gt;getMessage() ])); } } } return json_encode($output, JSON_PRETTY_PRINT); } /** * Backup. * * @command backup_migrate:backup * @aliases bamb * * @param source_id Identifier of the Backup Source. * @param destination_id Identifier of the Backup Destination. * * @return string Backup completion status * * @throws \Drupal\backup_migrate\Core\Exception\BackupMigrateException * */ public function backup( $source_id, $destination_id ): string { Drush::bootstrapManager()-&gt;doBootstrap(DrupalBootLevels::FULL); $bam = \backup_migrate_get_service_object(); $bam-&gt;backup($source_id, $destination_id); return json_encode([ &#39;status&#39; =&gt; &#39;success&#39;, &#39;message&#39; =&gt; dt(&#39;Backup complete.&#39;) ], JSON_PRETTY_PRINT); } /** * Restore. * * @command backup_migrate:restore * @aliases bamr * * @param source_id Identifier of the Backup Source. * @param destination_id Identifier of the Backup Destination. * @param file_id optional Identifier of the Destination file. * * @return string Restore completion status * * @throws \Drupal\backup_migrate\Core\Exception\BackupMigrateException * */ public function restore( $source_id, $destination_id, $file_id = null, ): string { Drush::bootstrapManager()-&gt;doBootstrap(DrupalBootLevels::FULL); $bam = \backup_migrate_get_service_object(); $bam-&gt;restore($source_id, $destination_id, $file_id); return json_encode([ &#39;status&#39; =&gt; &#39;success&#39;, &#39;message&#39; =&gt; dt(&#39;Restore complete.&#39;) ], JSON_PRETTY_PRINT); } }" />
+<link rel="canonical" href="https://blog.karimratib.me/2023/06/01/backup-migrate-drush.html" />
+<meta property="og:url" content="https://blog.karimratib.me/2023/06/01/backup-migrate-drush.html" />
+<meta property="og:site_name" content="infojunkie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-06-01T00:00:00-07:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Drupal 9: Backup and Migrate - Drush 11 support" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Karim Ratib"},"dateModified":"2023-06-01T00:00:00-07:00","datePublished":"2023-06-01T00:00:00-07:00","description":"Supporting content migrations across stages is a tricky subject, and most tools I reviewed seemed too fragile or too complex to be delivered to a client. We opted to use a simple workflow based on BAM (Backup and Migrate) coupled with config re-synchronization. To help automate the process, I wrote a set of drush commands that implement BAM backup and restore. It’s been tested extensively, but only with a specific set of sources and destinations, so I am reproducing the current code here until it gets published as a module. One design decision I made was to produce output as JSON, to make it easier for downstream automation. The typical usage scenario is the following: $ drush bamb default_db private_files // =&gt; { // &quot;status&quot;: &quot;success&quot;, // &quot;message&quot;: &quot;Backup complete.&quot; //} $ drush bamls --files=private_files // =&gt; { // &quot;sources&quot;: [ // { // &quot;id&quot;: &quot;default_db&quot;, // &quot;label&quot;: &quot;Default Drupal Database&quot;, // &quot;type&quot;: &quot;DefaultDB&quot; // }, // { // &quot;id&quot;: &quot;entire_site&quot;, // &quot;label&quot;: &quot;Entire Site (do not use)&quot;, // &quot;type&quot;: &quot;EntireSite&quot; // }, // { // &quot;id&quot;: &quot;private_files&quot;, // &quot;label&quot;: &quot;Private Files Directory&quot;, // &quot;type&quot;: &quot;DrupalFiles&quot; // }, // { // &quot;id&quot;: &quot;public_files&quot;, // &quot;label&quot;: &quot;Public Files Directory&quot;, // &quot;type&quot;: &quot;DrupalFiles&quot; // }, // { // &quot;id&quot;: &quot;ssot_database&quot;, // &quot;label&quot;: &quot;SSoT Database&quot;, // &quot;type&quot;: &quot;PostgreSQL&quot; // } // ], // &quot;destinations&quot;: [ // { // &quot;id&quot;: &quot;private_files&quot;, // &quot;label&quot;: &quot;Private Files Directory&quot;, // &quot;type&quot;: &quot;Directory&quot; // }, // { // &quot;id&quot;: &quot;s3_bucket&quot;, // &quot;label&quot;: &quot;S3 Bucket&quot;, // &quot;type&quot;: &quot;awss3&quot; // } // ], // &quot;files&quot;: { // &quot;private_files&quot;: [ // { // &quot;id&quot;: &quot;backup-2023-01-27T15-44-19.sql.gz&quot;, // &quot;filename&quot;: &quot;prod-2023-01-27T15-44-19.sql.gz&quot;, // &quot;filesize&quot;: 19499222, // &quot;datestamp&quot;: 1674869134 // } // ] // } //} $ drush bamr default_db private_files backup-2023-01-27T15-44-19.sql.gz // =&gt; { // &quot;status&quot;: &quot;success&quot;, // &quot;message&quot;: &quot;Restore complete.&quot; //} And here’s the source for the command: &lt;?php namespace Drush\\Commands; use Drush\\Drush; use Drush\\Commands\\DrushCommands; use Drush\\Boot\\DrupalBootLevels; use Drupal\\backup_migrate\\Core\\Destination\\ListableDestinationInterface; use Symfony\\Component\\Console\\Input\\InputOption; class BackupMigrateCommands extends DrushCommands { /** * List sources and destinations. * * @command backup_migrate:list * @aliases bamls * * @option sources Flag to list sources (default: yes, use --no-sources to hide) * @option destinations Flag to list destinations (default: yes, use --no-destinations to hide) * @option files Flag to list files for a comma-separated list of destination identifiers (default: none) * * @param options * * @return string JSON listing of sources, destinations, files * */ public function list(array $options = [ &#39;sources&#39; =&gt; true, &#39;destinations&#39; =&gt; true, &#39;files&#39; =&gt; InputOption::VALUE_REQUIRED, ]): string { Drush::bootstrapManager()-&gt;doBootstrap(DrupalBootLevels::FULL); $bam = \\backup_migrate_get_service_object(); $output = []; if ($options[&#39;sources&#39;]) { $output[&#39;sources&#39;] = array_reduce(array_keys($bam-&gt;sources()-&gt;getAll()), function($sources, $source_id) { $source = \\Drupal::entityTypeManager()-&gt;getStorage(&#39;backup_migrate_source&#39;)-&gt;load($source_id); if ($source) { $sources[] = [ &#39;id&#39; =&gt; $source_id, &#39;label&#39; =&gt; $source-&gt;get(&#39;label&#39;), &#39;type&#39; =&gt; $source-&gt;get(&#39;type&#39;), ]; } return $sources; }, []); } if ($options[&#39;destinations&#39;]) { $output[&#39;destinations&#39;] = array_reduce(array_keys($bam-&gt;destinations()-&gt;getAll()), function($destinations, $destination_id) { $destination = \\Drupal::entityTypeManager()-&gt;getStorage(&#39;backup_migrate_destination&#39;)-&gt;load($destination_id); if ($destination) { $destinations[] = [ &#39;id&#39; =&gt; $destination_id, &#39;label&#39; =&gt; $destination-&gt;get(&#39;label&#39;), &#39;type&#39; =&gt; $destination-&gt;get(&#39;type&#39;), ]; } return $destinations; }, []); } if ($options[&#39;files&#39;]) { foreach(array_map(&#39;trim&#39;, explode(&#39;,&#39;, $options[&#39;files&#39;])) as $destination_id) { $destination = $bam-&gt;destinations()-&gt;get($destination_id); if (!$destination) { $this-&gt;logger()-&gt;warning(dt(&#39;The destination !id does not exist.&#39;, [&#39;!id&#39; =&gt; $destination_id])); continue; } if (!$destination instanceof ListableDestinationInterface) { $this-&gt;logger()-&gt;warning(dt(&#39;The destination !id is not listable.&#39;, [&#39;!id&#39; =&gt; $destination_id])); continue; } try { $files = $destination-&gt;listFiles(); $output[&#39;files&#39;][$destination_id] = array_reduce(array_keys($files), function($files_info, $file_id) use($files) { $files_info[] = array_merge([ &#39;id&#39; =&gt; $file_id, &#39;filename&#39; =&gt; $files[$file_id]-&gt;getFullName(), ], $files[$file_id]-&gt;getMetaAll()); return $files_info; }, []); usort($output[&#39;files&#39;][$destination_id], function($file1, $file2) { // TODO What if datestamp is not available? $a = $file1[&#39;datestamp&#39;]; $b = $file2[&#39;datestamp&#39;]; if ($a == $b) return 0; return ($a &lt; $b) ? -1 : 1; }); } catch (\\Exception $e) { $this-&gt;logger()-&gt;error(dt(&#39;The destination !id caused an error: !error&#39;, [ &#39;!id&#39; =&gt; $destination_id, &#39;!error&#39; =&gt; $e-&gt;getMessage() ])); } } } return json_encode($output, JSON_PRETTY_PRINT); } /** * Backup. * * @command backup_migrate:backup * @aliases bamb * * @param source_id Identifier of the Backup Source. * @param destination_id Identifier of the Backup Destination. * * @return string Backup completion status * * @throws \\Drupal\\backup_migrate\\Core\\Exception\\BackupMigrateException * */ public function backup( $source_id, $destination_id ): string { Drush::bootstrapManager()-&gt;doBootstrap(DrupalBootLevels::FULL); $bam = \\backup_migrate_get_service_object(); $bam-&gt;backup($source_id, $destination_id); return json_encode([ &#39;status&#39; =&gt; &#39;success&#39;, &#39;message&#39; =&gt; dt(&#39;Backup complete.&#39;) ], JSON_PRETTY_PRINT); } /** * Restore. * * @command backup_migrate:restore * @aliases bamr * * @param source_id Identifier of the Backup Source. * @param destination_id Identifier of the Backup Destination. * @param file_id optional Identifier of the Destination file. * * @return string Restore completion status * * @throws \\Drupal\\backup_migrate\\Core\\Exception\\BackupMigrateException * */ public function restore( $source_id, $destination_id, $file_id = null, ): string { Drush::bootstrapManager()-&gt;doBootstrap(DrupalBootLevels::FULL); $bam = \\backup_migrate_get_service_object(); $bam-&gt;restore($source_id, $destination_id, $file_id); return json_encode([ &#39;status&#39; =&gt; &#39;success&#39;, &#39;message&#39; =&gt; dt(&#39;Restore complete.&#39;) ], JSON_PRETTY_PRINT); } }","headline":"Drupal 9: Backup and Migrate - Drush 11 support","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.karimratib.me/2023/06/01/backup-migrate-drush.html"},"url":"https://blog.karimratib.me/2023/06/01/backup-migrate-drush.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+  <body style="visibility: hidden;" class="no-js">
+    <script>
+      // FOUC handling
+      // https://www.primative.net/blog/how-to-get-rid-of-the-flash-of-unstyled-content/
+      const domReady = (cb) => {
+        document.readyState === 'interactive' || document.readyState === 'complete'
+          ? cb()
+          : document.addEventListener('DOMContentLoaded', cb);
+      };
+      domReady(() => {
+        // Display body when DOM is loaded
+        document.body.style.visibility = 'visible';
+      });
+
+      // If JS is disabled, "no-js" class causes body to be visible from the beginning.
+      // If JS is enabled, remove the "no-js" class will force-hide the body until the above kicks in.
+      document.querySelector('body').classList.remove('no-js');
+    </script>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" href="/">
+      
+        infojunkie
+      
+    </a>
+
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+            <a class="page-link" href="/about/">about</a>
+            
+          
+            
+            
+            <a class="page-link" href="/drupal.html">drupal</a>
+            
+          
+            
+            
+            <a class="page-link" href="/demos/">music</a>
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Drupal 9: Backup and Migrate - Drush 11 support</h1>
+    <p class="post-meta">
+      <time datetime="2023-06-01T00:00:00-07:00" itemprop="datePublished">
+        
+        Jun 1, 2023
+      </time>
+      </p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Supporting content migrations across stages is a tricky subject, and most tools I reviewed seemed too fragile or too complex to be delivered to a client. We opted to use a simple workflow based on <a href="https://www.drupal.org/project/backup_migrate" rel="noopener noreferrer" target="_blank">BAM (Backup and Migrate)</a> coupled with config re-synchronization. To help automate the process, I wrote a set of <code class="language-plaintext highlighter-rouge">drush</code> commands that implement BAM backup and restore. It’s been tested extensively, but only with a specific set of sources and destinations, so I am reproducing the current code here until it gets published as a module. One design decision I made was to produce output as JSON, to make it easier for downstream automation.</p>
+
+<p>The typical usage scenario is the following:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>drush bamb default_db private_files
+// <span class="o">=&gt;</span> <span class="o">{</span>
+//    <span class="s2">"status"</span>: <span class="s2">"success"</span>,
+//    <span class="s2">"message"</span>: <span class="s2">"Backup complete."</span>
+//<span class="o">}</span>
+<span class="nv">$ </span>drush bamls <span class="nt">--files</span><span class="o">=</span>private_files
+// <span class="o">=&gt;</span> <span class="o">{</span>
+//    <span class="s2">"sources"</span>: <span class="o">[</span>
+//        <span class="o">{</span>
+//            <span class="s2">"id"</span>: <span class="s2">"default_db"</span>,
+//            <span class="s2">"label"</span>: <span class="s2">"Default Drupal Database"</span>,
+//            <span class="s2">"type"</span>: <span class="s2">"DefaultDB"</span>
+//        <span class="o">}</span>,
+//        <span class="o">{</span>
+//            <span class="s2">"id"</span>: <span class="s2">"entire_site"</span>,
+//            <span class="s2">"label"</span>: <span class="s2">"Entire Site (do not use)"</span>,
+//            <span class="s2">"type"</span>: <span class="s2">"EntireSite"</span>
+//        <span class="o">}</span>,
+//        <span class="o">{</span>
+//            <span class="s2">"id"</span>: <span class="s2">"private_files"</span>,
+//            <span class="s2">"label"</span>: <span class="s2">"Private Files Directory"</span>,
+//            <span class="s2">"type"</span>: <span class="s2">"DrupalFiles"</span>
+//        <span class="o">}</span>,
+//        <span class="o">{</span>
+//            <span class="s2">"id"</span>: <span class="s2">"public_files"</span>,
+//            <span class="s2">"label"</span>: <span class="s2">"Public Files Directory"</span>,
+//            <span class="s2">"type"</span>: <span class="s2">"DrupalFiles"</span>
+//        <span class="o">}</span>,
+//        <span class="o">{</span>
+//            <span class="s2">"id"</span>: <span class="s2">"ssot_database"</span>,
+//            <span class="s2">"label"</span>: <span class="s2">"SSoT Database"</span>,
+//            <span class="s2">"type"</span>: <span class="s2">"PostgreSQL"</span>
+//        <span class="o">}</span>
+//    <span class="o">]</span>,
+//    <span class="s2">"destinations"</span>: <span class="o">[</span>
+//        <span class="o">{</span>
+//            <span class="s2">"id"</span>: <span class="s2">"private_files"</span>,
+//            <span class="s2">"label"</span>: <span class="s2">"Private Files Directory"</span>,
+//            <span class="s2">"type"</span>: <span class="s2">"Directory"</span>
+//        <span class="o">}</span>,
+//        <span class="o">{</span>
+//            <span class="s2">"id"</span>: <span class="s2">"s3_bucket"</span>,
+//            <span class="s2">"label"</span>: <span class="s2">"S3 Bucket"</span>,
+//            <span class="s2">"type"</span>: <span class="s2">"awss3"</span>
+//        <span class="o">}</span>
+//    <span class="o">]</span>,
+//    <span class="s2">"files"</span>: <span class="o">{</span>
+//        <span class="s2">"private_files"</span>: <span class="o">[</span>
+//            <span class="o">{</span>
+//                <span class="s2">"id"</span>: <span class="s2">"backup-2023-01-27T15-44-19.sql.gz"</span>,
+//                <span class="s2">"filename"</span>: <span class="s2">"prod-2023-01-27T15-44-19.sql.gz"</span>,
+//                <span class="s2">"filesize"</span>: 19499222,
+//                <span class="s2">"datestamp"</span>: 1674869134
+//            <span class="o">}</span>
+//        <span class="o">]</span>
+//    <span class="o">}</span>
+//<span class="o">}</span>
+<span class="nv">$ </span>drush bamr default_db private_files backup-2023-01-27T15-44-19.sql.gz
+// <span class="o">=&gt;</span> <span class="o">{</span>
+//    <span class="s2">"status"</span>: <span class="s2">"success"</span>,
+//    <span class="s2">"message"</span>: <span class="s2">"Restore complete."</span>
+//<span class="o">}</span>
+</code></pre></div></div>
+
+<p>And here’s the source for the command:</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">namespace</span> <span class="nn">Drush\Commands</span><span class="p">;</span>
+
+<span class="kn">use</span> <span class="nc">Drush\Drush</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Drush\Commands\DrushCommands</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Drush\Boot\DrupalBootLevels</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nf">Drupal\backup_migrate</span><span class="nc">\Core\Destination\ListableDestinationInterface</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Symfony\Component\Console\Input\InputOption</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">BackupMigrateCommands</span> <span class="kd">extends</span> <span class="nc">DrushCommands</span>
+<span class="p">{</span>
+    <span class="cd">/**
+     * List sources and destinations.
+     *
+     * @command backup_migrate:list
+     * @aliases bamls
+     *
+     * @option sources Flag to list sources (default: yes, use --no-sources to hide)
+     * @option destinations Flag to list destinations (default: yes, use --no-destinations to hide)
+     * @option files Flag to list files for a comma-separated list of destination identifiers (default: none)
+     *
+     * @param options
+     *
+     * @return string JSON listing of sources, destinations, files
+     *
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">list</span><span class="p">(</span><span class="kt">array</span> <span class="nv">$options</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">'sources'</span> <span class="o">=&gt;</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="s1">'destinations'</span> <span class="o">=&gt;</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="s1">'files'</span> <span class="o">=&gt;</span> <span class="nc">InputOption</span><span class="o">::</span><span class="no">VALUE_REQUIRED</span><span class="p">,</span>
+    <span class="p">])</span><span class="o">:</span> <span class="n">string</span> <span class="p">{</span>
+        <span class="nc">Drush</span><span class="o">::</span><span class="nf">bootstrapManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">doBootstrap</span><span class="p">(</span><span class="nc">DrupalBootLevels</span><span class="o">::</span><span class="no">FULL</span><span class="p">);</span>
+        <span class="nv">$bam</span> <span class="o">=</span> <span class="nf">\backup_migrate_get_service_object</span><span class="p">();</span>
+        <span class="nv">$output</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$options</span><span class="p">[</span><span class="s1">'sources'</span><span class="p">])</span> <span class="p">{</span>
+            <span class="nv">$output</span><span class="p">[</span><span class="s1">'sources'</span><span class="p">]</span> <span class="o">=</span> <span class="nb">array_reduce</span><span class="p">(</span><span class="nb">array_keys</span><span class="p">(</span><span class="nv">$bam</span><span class="o">-&gt;</span><span class="nf">sources</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">getAll</span><span class="p">()),</span> <span class="k">function</span><span class="p">(</span><span class="nv">$sources</span><span class="p">,</span> <span class="nv">$source_id</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$source</span> <span class="o">=</span> <span class="nc">\Drupal</span><span class="o">::</span><span class="nf">entityTypeManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">getStorage</span><span class="p">(</span><span class="s1">'backup_migrate_source'</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">load</span><span class="p">(</span><span class="nv">$source_id</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nv">$source</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nv">$sources</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="s1">'id'</span> <span class="o">=&gt;</span> <span class="nv">$source_id</span><span class="p">,</span>
+                        <span class="s1">'label'</span> <span class="o">=&gt;</span> <span class="nv">$source</span><span class="o">-&gt;</span><span class="nf">get</span><span class="p">(</span><span class="s1">'label'</span><span class="p">),</span>
+                        <span class="s1">'type'</span> <span class="o">=&gt;</span> <span class="nv">$source</span><span class="o">-&gt;</span><span class="nf">get</span><span class="p">(</span><span class="s1">'type'</span><span class="p">),</span>
+                    <span class="p">];</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="nv">$sources</span><span class="p">;</span>
+            <span class="p">},</span> <span class="p">[]);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$options</span><span class="p">[</span><span class="s1">'destinations'</span><span class="p">])</span> <span class="p">{</span>
+            <span class="nv">$output</span><span class="p">[</span><span class="s1">'destinations'</span><span class="p">]</span> <span class="o">=</span> <span class="nb">array_reduce</span><span class="p">(</span><span class="nb">array_keys</span><span class="p">(</span><span class="nv">$bam</span><span class="o">-&gt;</span><span class="nf">destinations</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">getAll</span><span class="p">()),</span> <span class="k">function</span><span class="p">(</span><span class="nv">$destinations</span><span class="p">,</span> <span class="nv">$destination_id</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$destination</span> <span class="o">=</span> <span class="nc">\Drupal</span><span class="o">::</span><span class="nf">entityTypeManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">getStorage</span><span class="p">(</span><span class="s1">'backup_migrate_destination'</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">load</span><span class="p">(</span><span class="nv">$destination_id</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nv">$destination</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nv">$destinations</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="s1">'id'</span> <span class="o">=&gt;</span> <span class="nv">$destination_id</span><span class="p">,</span>
+                        <span class="s1">'label'</span> <span class="o">=&gt;</span> <span class="nv">$destination</span><span class="o">-&gt;</span><span class="nf">get</span><span class="p">(</span><span class="s1">'label'</span><span class="p">),</span>
+                        <span class="s1">'type'</span> <span class="o">=&gt;</span> <span class="nv">$destination</span><span class="o">-&gt;</span><span class="nf">get</span><span class="p">(</span><span class="s1">'type'</span><span class="p">),</span>
+                    <span class="p">];</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="nv">$destinations</span><span class="p">;</span>
+            <span class="p">},</span> <span class="p">[]);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$options</span><span class="p">[</span><span class="s1">'files'</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">foreach</span><span class="p">(</span><span class="nb">array_map</span><span class="p">(</span><span class="s1">'trim'</span><span class="p">,</span> <span class="nb">explode</span><span class="p">(</span><span class="s1">','</span><span class="p">,</span> <span class="nv">$options</span><span class="p">[</span><span class="s1">'files'</span><span class="p">]))</span> <span class="k">as</span> <span class="nv">$destination_id</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$destination</span> <span class="o">=</span> <span class="nv">$bam</span><span class="o">-&gt;</span><span class="nf">destinations</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">get</span><span class="p">(</span><span class="nv">$destination_id</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$destination</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">logger</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">warning</span><span class="p">(</span><span class="nf">dt</span><span class="p">(</span><span class="s1">'The destination !id does not exist.'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'!id'</span> <span class="o">=&gt;</span> <span class="nv">$destination_id</span><span class="p">]));</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$destination</span> <span class="k">instanceof</span> <span class="nc">ListableDestinationInterface</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">logger</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">warning</span><span class="p">(</span><span class="nf">dt</span><span class="p">(</span><span class="s1">'The destination !id is not listable.'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'!id'</span> <span class="o">=&gt;</span> <span class="nv">$destination_id</span><span class="p">]));</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">try</span> <span class="p">{</span>
+                    <span class="nv">$files</span> <span class="o">=</span> <span class="nv">$destination</span><span class="o">-&gt;</span><span class="nf">listFiles</span><span class="p">();</span>
+                    <span class="nv">$output</span><span class="p">[</span><span class="s1">'files'</span><span class="p">][</span><span class="nv">$destination_id</span><span class="p">]</span> <span class="o">=</span> <span class="nb">array_reduce</span><span class="p">(</span><span class="nb">array_keys</span><span class="p">(</span><span class="nv">$files</span><span class="p">),</span> <span class="k">function</span><span class="p">(</span><span class="nv">$files_info</span><span class="p">,</span> <span class="nv">$file_id</span><span class="p">)</span> <span class="k">use</span><span class="p">(</span><span class="nv">$files</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nv">$files_info</span><span class="p">[]</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">([</span>
+                            <span class="s1">'id'</span> <span class="o">=&gt;</span> <span class="nv">$file_id</span><span class="p">,</span>
+                            <span class="s1">'filename'</span> <span class="o">=&gt;</span> <span class="nv">$files</span><span class="p">[</span><span class="nv">$file_id</span><span class="p">]</span><span class="o">-&gt;</span><span class="nf">getFullName</span><span class="p">(),</span>
+                        <span class="p">],</span> <span class="nv">$files</span><span class="p">[</span><span class="nv">$file_id</span><span class="p">]</span><span class="o">-&gt;</span><span class="nf">getMetaAll</span><span class="p">());</span>
+                        <span class="k">return</span> <span class="nv">$files_info</span><span class="p">;</span>
+                    <span class="p">},</span> <span class="p">[]);</span>
+                    <span class="nb">usort</span><span class="p">(</span><span class="nv">$output</span><span class="p">[</span><span class="s1">'files'</span><span class="p">][</span><span class="nv">$destination_id</span><span class="p">],</span> <span class="k">function</span><span class="p">(</span><span class="nv">$file1</span><span class="p">,</span> <span class="nv">$file2</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="c1">// TODO What if datestamp is not available?</span>
+                        <span class="nv">$a</span> <span class="o">=</span> <span class="nv">$file1</span><span class="p">[</span><span class="s1">'datestamp'</span><span class="p">];</span>
+                        <span class="nv">$b</span> <span class="o">=</span> <span class="nv">$file2</span><span class="p">[</span><span class="s1">'datestamp'</span><span class="p">];</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="nv">$a</span> <span class="o">==</span> <span class="nv">$b</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+                        <span class="k">return</span> <span class="p">(</span><span class="nv">$a</span> <span class="o">&lt;</span> <span class="nv">$b</span><span class="p">)</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="p">});</span>
+                <span class="p">}</span>
+                <span class="k">catch</span> <span class="p">(</span><span class="nc">\Exception</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">logger</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">error</span><span class="p">(</span><span class="nf">dt</span><span class="p">(</span><span class="s1">'The destination !id caused an error: !error'</span><span class="p">,</span> <span class="p">[</span>
+                        <span class="s1">'!id'</span> <span class="o">=&gt;</span> <span class="nv">$destination_id</span><span class="p">,</span>
+                        <span class="s1">'!error'</span> <span class="o">=&gt;</span> <span class="nv">$e</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">()</span>
+                    <span class="p">]));</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">json_encode</span><span class="p">(</span><span class="nv">$output</span><span class="p">,</span> <span class="no">JSON_PRETTY_PRINT</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="cd">/**
+     * Backup.
+     *
+     * @command backup_migrate:backup
+     * @aliases bamb
+     *
+     * @param source_id Identifier of the Backup Source.
+     * @param destination_id Identifier of the Backup Destination.
+     *
+     * @return string Backup completion status
+     *
+     * @throws \Drupal\backup_migrate\Core\Exception\BackupMigrateException
+     *
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">backup</span><span class="p">(</span>
+        <span class="nv">$source_id</span><span class="p">,</span>
+        <span class="nv">$destination_id</span>
+    <span class="p">):</span> <span class="kt">string</span>
+    <span class="p">{</span>
+        <span class="nc">Drush</span><span class="o">::</span><span class="nf">bootstrapManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">doBootstrap</span><span class="p">(</span><span class="nc">DrupalBootLevels</span><span class="o">::</span><span class="no">FULL</span><span class="p">);</span>
+        <span class="nv">$bam</span> <span class="o">=</span> <span class="nf">\backup_migrate_get_service_object</span><span class="p">();</span>
+        <span class="nv">$bam</span><span class="o">-&gt;</span><span class="nf">backup</span><span class="p">(</span><span class="nv">$source_id</span><span class="p">,</span> <span class="nv">$destination_id</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">json_encode</span><span class="p">([</span>
+            <span class="s1">'status'</span> <span class="o">=&gt;</span> <span class="s1">'success'</span><span class="p">,</span>
+            <span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="nf">dt</span><span class="p">(</span><span class="s1">'Backup complete.'</span><span class="p">)</span>
+        <span class="p">],</span> <span class="no">JSON_PRETTY_PRINT</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="cd">/**
+     * Restore.
+     *
+     * @command backup_migrate:restore
+     * @aliases bamr
+     *
+     * @param source_id Identifier of the Backup Source.
+     * @param destination_id Identifier of the Backup Destination.
+     * @param file_id optional Identifier of the Destination file.
+     *
+     * @return string Restore completion status
+     *
+     * @throws \Drupal\backup_migrate\Core\Exception\BackupMigrateException
+     *
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">restore</span><span class="p">(</span>
+        <span class="nv">$source_id</span><span class="p">,</span>
+        <span class="nv">$destination_id</span><span class="p">,</span>
+        <span class="nv">$file_id</span> <span class="o">=</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="p">):</span> <span class="kt">string</span>
+    <span class="p">{</span>
+        <span class="nc">Drush</span><span class="o">::</span><span class="nf">bootstrapManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">doBootstrap</span><span class="p">(</span><span class="nc">DrupalBootLevels</span><span class="o">::</span><span class="no">FULL</span><span class="p">);</span>
+        <span class="nv">$bam</span> <span class="o">=</span> <span class="nf">\backup_migrate_get_service_object</span><span class="p">();</span>
+        <span class="nv">$bam</span><span class="o">-&gt;</span><span class="nf">restore</span><span class="p">(</span><span class="nv">$source_id</span><span class="p">,</span> <span class="nv">$destination_id</span><span class="p">,</span> <span class="nv">$file_id</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">json_encode</span><span class="p">([</span>
+            <span class="s1">'status'</span> <span class="o">=&gt;</span> <span class="s1">'success'</span><span class="p">,</span>
+            <span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="nf">dt</span><span class="p">(</span><span class="s1">'Restore complete.'</span><span class="p">)</span>
+        <span class="p">],</span> <span class="no">JSON_PRETTY_PRINT</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+  </div>
+
+  
+    <hr>
+If you're looking for Drupal expertise, I <a href="https://thereisamoduleforthat.com/" class="tmft">offer Drupal consultancy services&nbsp;<img src="/assets/tmft.svg"></a> including:
+<ul>
+  <li>Solution architecture</li>
+  <li>Module development</li>
+  <li>Service integration</li>
+  <li>Content migration</li>
+  <li>Troubleshooting and optimization</li>
+  <li>Engineering leadership</li>
+</ul>
+
+  
+
+  
+    
+<script data-isso="https://blog.karimratib.me/isso" src="https://blog.karimratib.me/isso/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+
+  
+</article>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">infojunkie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>
+            <a href="/assets/CV-KarimRATIB.pdf">
+              my resume
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/infojunkie/blog" rel="noopener noreferrer" target="_blank">
+              blog source
+            </a>
+          </li>
+        </ul>
+
+        <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
+
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          <li>
+            <a href="https://thereisamoduleforthat.com" rel="noopener noreferrer" target="_blank">
+              <img src="/assets/tmft.svg">
+              There's a module for that!
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/infojunkie" rel="noopener noreferrer" target="_blank">
+              <svg class="icon"><use xlink:href='#fab.fa-github'></use></svg>
+              GitHub
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@KarimRatib" rel="noopener noreferrer" target="_blank">
+              <svg class="icon"><use xlink:href='#fab.fa-youtube'></use></svg>
+              YouTube
+            </a>
+          </li>
+          <li>
+            <a href="https://musescore.com/infojunkie" rel="noopener noreferrer" target="_blank">
+              <svg class="icon"><use xlink:href='#fas.fa-music'></use></svg>
+              Musescore
+            </a>
+          </li>
+          <li>
+            <a href="mailto:karim.ratib@gmail.com">
+              <svg class="icon"><use xlink:href='#far.fa-envelope'></use></svg>
+              email
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    </div>
+
+  </div>
+
+  <svg display="none" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <defs>
+                  <!--
+                  Font Awesome Free 5.5.0 by @fontawesome - https://fontawesome.com
+                  License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+                  -->
+              <symbol id='fab.fa-github' viewBox='0 0 496 512'>
+            <title>github</title>
+            <path class='path1' d='M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z'></path>
+        </symbol>
+        <symbol id='fab.fa-youtube' viewBox='0 0 576 512'>
+            <title>youtube</title>
+            <path class='path1' d='M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z'></path>
+        </symbol>
+        <symbol id='fas.fa-music' viewBox='0 0 512 512'>
+            <title>music</title>
+            <path class='path1' d='M499.1 6.3c8.1 6 12.9 15.6 12.9 25.7v72V368c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V147L192 223.8V432c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V200 128c0-14.1 9.3-26.6 22.8-30.7l320-96c9.7-2.9 20.2-1.1 28.3 5z'></path>
+        </symbol>
+        <symbol id='far.fa-envelope' viewBox='0 0 512 512'>
+            <title>envelope</title>
+            <path class='path1' d='M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z'></path>
+        </symbol>
+        </defs>
+              </svg>
+
+</footer>
+
+
+  </body>
+
+</html>

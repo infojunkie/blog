@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <style>
+    .no-js {
+      visibility: visible !important;
+    }
+  </style>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Visualizing musical tunings in the browser</title>
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="https://blog.karimratib.me/2021/01/07/tuning-diagram.html">
+  <link rel="alternate" type="application/rss+xml" title="infojunkie" href="/feed.xml">
+
+  <link rel="shortcut icon" href="/favicon.ico">
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.4.0"></script>
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Visualizing musical tunings in the browser | infojunkie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Visualizing musical tunings in the browser" />
+<meta name="author" content="Karim Ratib" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="One of my recurring intellectual joys is to learn about the deep connections between music and mathematics. About a decade ago, I discovered the amazing work of Gareth Loy, “Musimathics: A Guided Tour of the Mathematics of Music”, a generous 2-volume overview of the mathematics and physics underlying many different aspects of music, from waves to sampling to psychoacoustics. For a non-mathematician like myself, the maths in this book are easy to follow and the intuition is greatly helped by examples and diagrams. It has become one of my favourite references, which I’ve had the pleasure to offer to many of my similarly-minded friends. Musimathics One of the first subjects that fascinated me is the chapter about “Musical Scales, Tuning, and Intonation” that explains the evolution of tunings and temperaments from Pythagorean tuning to the contemporary 12-tet temperament, and sent me through the rabbit hole of microtonality experiments across musical cultures and scholarships. Growing up in Egypt, where microtonal maqam music has a long and established history, I especially appreciated the book’s mathematical exposition that allowed me to grasp the logical foundations of this musical culture. It is in this spirit that I was motivated to create a Web Audio experiment that allows to play back various pieces in different temperaments - including recreating a historical microtonal tuning described by a 19th century French musicologist who studied Egyptian music practices at the time of Napoleon’s French campaign in Egypt, before the temperament of this region’s music was “normalized” (to use a gentle euphemism) to 24-tet in a famous music congress in Cairo in 1932. Later, I came across beautiful circular diagrams representing musical rhythms, as pioneered by Godfried Toussaint. The clarity of these diagrams inspired me to recreate them for musical tunings, which also exhibit periodicity. Here’s the result, using Mike Bostock’s excellent Observable platform. You can click the notes to hear them: A quick introduction to the mathematics of tuning The mathematics of tuning are quite simple, once the historical details are abstracted. Essentially, the problem that musicians face is to choose satisfactory intervals for their scales, that are a) pleasing to the ear, b) flexible enough to express the various emotions/meanings that they want to convey, and c) feasible on their instruments. Musical cultures and scholars have solved this problem in different ways over the ages, but some features are largely invariant and constitute the building blocks of most scales, because of the psychoacoustic features of human perception. Musical pitches (notes) are specific frequencies of sound waves. Regardless of specific frequency, though, the human ear perceives ratios of frequencies (called intervals) as meaningful: given a note played at frequency f, the human ear will perceive another note at frequency 2f as being equivalent in quality (called chroma) albeit of higher pitch. The ratio 2:1 is called the octave and constitutes the first invariant when building up a scale. Another significant ratio is the perfect fifth (ratio 3:2) which most musical cultures use as a point of tension in the melodic development, which tends to eventually resolve to the root tonic note. From these humble beginnings, the puzzle of building up a scale is then to populate the interval 2:1 with many more notes that enrich the possibilities of musical expression. I refer the interested reader to the book above for an in-depth exposition, or indeed the multitude of online resources devoted to this subject (starting of course with the relevant Wikipedia article). In the tuning diagram above, the circle represents a single octave, on which the intervals of various tunings are laid out according to their ratios. For example, the modern Western 12-tet temperament is made up of 12 equal intervals, each equal to the 12th root of 2 (i.e. 12√2) which yields a perfect octave (2​12⁄12 = 2), and an acceptably approximate fifth (within the psychoacoustic limits of human perception). Future work I have encapsulated and enhanced the tuning logic of my Web Audio experiment into a JavaScript library which can be reused in Web applications. The plan is to use this library in my ongoing project to create a musician’s online notebook, which will allow for musical scores to be annotated and manipulated to enhance one’s understanding and expressive possibilities." />
+<meta property="og:description" content="One of my recurring intellectual joys is to learn about the deep connections between music and mathematics. About a decade ago, I discovered the amazing work of Gareth Loy, “Musimathics: A Guided Tour of the Mathematics of Music”, a generous 2-volume overview of the mathematics and physics underlying many different aspects of music, from waves to sampling to psychoacoustics. For a non-mathematician like myself, the maths in this book are easy to follow and the intuition is greatly helped by examples and diagrams. It has become one of my favourite references, which I’ve had the pleasure to offer to many of my similarly-minded friends. Musimathics One of the first subjects that fascinated me is the chapter about “Musical Scales, Tuning, and Intonation” that explains the evolution of tunings and temperaments from Pythagorean tuning to the contemporary 12-tet temperament, and sent me through the rabbit hole of microtonality experiments across musical cultures and scholarships. Growing up in Egypt, where microtonal maqam music has a long and established history, I especially appreciated the book’s mathematical exposition that allowed me to grasp the logical foundations of this musical culture. It is in this spirit that I was motivated to create a Web Audio experiment that allows to play back various pieces in different temperaments - including recreating a historical microtonal tuning described by a 19th century French musicologist who studied Egyptian music practices at the time of Napoleon’s French campaign in Egypt, before the temperament of this region’s music was “normalized” (to use a gentle euphemism) to 24-tet in a famous music congress in Cairo in 1932. Later, I came across beautiful circular diagrams representing musical rhythms, as pioneered by Godfried Toussaint. The clarity of these diagrams inspired me to recreate them for musical tunings, which also exhibit periodicity. Here’s the result, using Mike Bostock’s excellent Observable platform. You can click the notes to hear them: A quick introduction to the mathematics of tuning The mathematics of tuning are quite simple, once the historical details are abstracted. Essentially, the problem that musicians face is to choose satisfactory intervals for their scales, that are a) pleasing to the ear, b) flexible enough to express the various emotions/meanings that they want to convey, and c) feasible on their instruments. Musical cultures and scholars have solved this problem in different ways over the ages, but some features are largely invariant and constitute the building blocks of most scales, because of the psychoacoustic features of human perception. Musical pitches (notes) are specific frequencies of sound waves. Regardless of specific frequency, though, the human ear perceives ratios of frequencies (called intervals) as meaningful: given a note played at frequency f, the human ear will perceive another note at frequency 2f as being equivalent in quality (called chroma) albeit of higher pitch. The ratio 2:1 is called the octave and constitutes the first invariant when building up a scale. Another significant ratio is the perfect fifth (ratio 3:2) which most musical cultures use as a point of tension in the melodic development, which tends to eventually resolve to the root tonic note. From these humble beginnings, the puzzle of building up a scale is then to populate the interval 2:1 with many more notes that enrich the possibilities of musical expression. I refer the interested reader to the book above for an in-depth exposition, or indeed the multitude of online resources devoted to this subject (starting of course with the relevant Wikipedia article). In the tuning diagram above, the circle represents a single octave, on which the intervals of various tunings are laid out according to their ratios. For example, the modern Western 12-tet temperament is made up of 12 equal intervals, each equal to the 12th root of 2 (i.e. 12√2) which yields a perfect octave (2​12⁄12 = 2), and an acceptably approximate fifth (within the psychoacoustic limits of human perception). Future work I have encapsulated and enhanced the tuning logic of my Web Audio experiment into a JavaScript library which can be reused in Web applications. The plan is to use this library in my ongoing project to create a musician’s online notebook, which will allow for musical scores to be annotated and manipulated to enhance one’s understanding and expressive possibilities." />
+<link rel="canonical" href="https://blog.karimratib.me/2021/01/07/tuning-diagram.html" />
+<meta property="og:url" content="https://blog.karimratib.me/2021/01/07/tuning-diagram.html" />
+<meta property="og:site_name" content="infojunkie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-01-07T00:00:00-08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Visualizing musical tunings in the browser" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Karim Ratib"},"dateModified":"2021-01-07T00:00:00-08:00","datePublished":"2021-01-07T00:00:00-08:00","description":"One of my recurring intellectual joys is to learn about the deep connections between music and mathematics. About a decade ago, I discovered the amazing work of Gareth Loy, “Musimathics: A Guided Tour of the Mathematics of Music”, a generous 2-volume overview of the mathematics and physics underlying many different aspects of music, from waves to sampling to psychoacoustics. For a non-mathematician like myself, the maths in this book are easy to follow and the intuition is greatly helped by examples and diagrams. It has become one of my favourite references, which I’ve had the pleasure to offer to many of my similarly-minded friends. Musimathics One of the first subjects that fascinated me is the chapter about “Musical Scales, Tuning, and Intonation” that explains the evolution of tunings and temperaments from Pythagorean tuning to the contemporary 12-tet temperament, and sent me through the rabbit hole of microtonality experiments across musical cultures and scholarships. Growing up in Egypt, where microtonal maqam music has a long and established history, I especially appreciated the book’s mathematical exposition that allowed me to grasp the logical foundations of this musical culture. It is in this spirit that I was motivated to create a Web Audio experiment that allows to play back various pieces in different temperaments - including recreating a historical microtonal tuning described by a 19th century French musicologist who studied Egyptian music practices at the time of Napoleon’s French campaign in Egypt, before the temperament of this region’s music was “normalized” (to use a gentle euphemism) to 24-tet in a famous music congress in Cairo in 1932. Later, I came across beautiful circular diagrams representing musical rhythms, as pioneered by Godfried Toussaint. The clarity of these diagrams inspired me to recreate them for musical tunings, which also exhibit periodicity. Here’s the result, using Mike Bostock’s excellent Observable platform. You can click the notes to hear them: A quick introduction to the mathematics of tuning The mathematics of tuning are quite simple, once the historical details are abstracted. Essentially, the problem that musicians face is to choose satisfactory intervals for their scales, that are a) pleasing to the ear, b) flexible enough to express the various emotions/meanings that they want to convey, and c) feasible on their instruments. Musical cultures and scholars have solved this problem in different ways over the ages, but some features are largely invariant and constitute the building blocks of most scales, because of the psychoacoustic features of human perception. Musical pitches (notes) are specific frequencies of sound waves. Regardless of specific frequency, though, the human ear perceives ratios of frequencies (called intervals) as meaningful: given a note played at frequency f, the human ear will perceive another note at frequency 2f as being equivalent in quality (called chroma) albeit of higher pitch. The ratio 2:1 is called the octave and constitutes the first invariant when building up a scale. Another significant ratio is the perfect fifth (ratio 3:2) which most musical cultures use as a point of tension in the melodic development, which tends to eventually resolve to the root tonic note. From these humble beginnings, the puzzle of building up a scale is then to populate the interval 2:1 with many more notes that enrich the possibilities of musical expression. I refer the interested reader to the book above for an in-depth exposition, or indeed the multitude of online resources devoted to this subject (starting of course with the relevant Wikipedia article). In the tuning diagram above, the circle represents a single octave, on which the intervals of various tunings are laid out according to their ratios. For example, the modern Western 12-tet temperament is made up of 12 equal intervals, each equal to the 12th root of 2 (i.e. 12√2) which yields a perfect octave (2​12⁄12 = 2), and an acceptably approximate fifth (within the psychoacoustic limits of human perception). Future work I have encapsulated and enhanced the tuning logic of my Web Audio experiment into a JavaScript library which can be reused in Web applications. The plan is to use this library in my ongoing project to create a musician’s online notebook, which will allow for musical scores to be annotated and manipulated to enhance one’s understanding and expressive possibilities.","headline":"Visualizing musical tunings in the browser","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.karimratib.me/2021/01/07/tuning-diagram.html"},"url":"https://blog.karimratib.me/2021/01/07/tuning-diagram.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+  <body style="visibility: hidden;" class="no-js">
+    <script>
+      // FOUC handling
+      // https://www.primative.net/blog/how-to-get-rid-of-the-flash-of-unstyled-content/
+      const domReady = (cb) => {
+        document.readyState === 'interactive' || document.readyState === 'complete'
+          ? cb()
+          : document.addEventListener('DOMContentLoaded', cb);
+      };
+      domReady(() => {
+        // Display body when DOM is loaded
+        document.body.style.visibility = 'visible';
+      });
+
+      // If JS is disabled, "no-js" class causes body to be visible from the beginning.
+      // If JS is enabled, remove the "no-js" class will force-hide the body until the above kicks in.
+      document.querySelector('body').classList.remove('no-js');
+    </script>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" href="/">
+      
+        infojunkie
+      
+    </a>
+
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+            <a class="page-link" href="/about/">about</a>
+            
+          
+            
+            
+            <a class="page-link" href="/drupal.html">drupal</a>
+            
+          
+            
+            
+            <a class="page-link" href="/demos/">music</a>
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Visualizing musical tunings in the browser</h1>
+    <p class="post-meta">
+      <time datetime="2021-01-07T00:00:00-08:00" itemprop="datePublished">
+        
+        Jan 7, 2021
+      </time>
+      </p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>One of my recurring intellectual joys is to learn about the deep connections between music and mathematics. About a decade ago, I discovered the amazing work of Gareth Loy, <a href="http://www.musimathics.com/" rel="noopener noreferrer" target="_blank">“Musimathics: A Guided Tour of the Mathematics of Music”</a>, a generous 2-volume overview of the mathematics and physics underlying many different aspects of music, from waves to sampling to psychoacoustics. For a non-mathematician like myself, the maths in this book are easy to follow and the intuition is greatly helped by examples and diagrams. It has become one of my favourite references, which I’ve had the pleasure to offer to many of my similarly-minded friends.</p>
+
+<div class="flex-center">
+  <figure class="image">
+    <a href="/assets/musimathics.jpg">
+      <img src="/assets/musimathics.jpg" style="max-width: 100%;" alt="Musimathics">
+    </a>
+    <figcaption>Musimathics</figcaption>
+  </figure>
+</div>
+
+<p>One of the first subjects that fascinated me is the chapter about “Musical Scales, Tuning, and Intonation” that explains the evolution of tunings and temperaments from Pythagorean tuning to the contemporary 12-tet temperament, and sent me through the rabbit hole of microtonality experiments across musical cultures and scholarships. Growing up in Egypt, where microtonal maqam music has a long and established history, I especially appreciated the book’s mathematical exposition that allowed me to grasp the logical foundations of this musical culture.</p>
+
+<p>It is in this spirit that I was motivated to create a <a href="https://blog.karimratib.me/demos/sheetplayer/" rel="noopener noreferrer" target="_blank">Web Audio experiment</a> that allows to play back various pieces in different temperaments - including recreating a <a href="https://play.google.com/store/books/details?id=JUv0AAAAMAAJ" rel="noopener noreferrer" target="_blank">historical microtonal tuning described by a 19th century French musicologist</a> who studied Egyptian music practices at the time of Napoleon’s French campaign in Egypt, before the temperament of this region’s music was <a href="https://en.wikipedia.org/wiki/Cairo_Congress_of_Arab_Music" rel="noopener noreferrer" target="_blank">“normalized” (to use a gentle euphemism) to 24-tet in a famous music congress in Cairo in 1932</a>.</p>
+
+<p>Later, I came across beautiful circular diagrams representing musical rhythms, as pioneered by <a href="http://cgm.cs.mcgill.ca/~godfried/rhythm-and-mathematics.html" rel="noopener noreferrer" target="_blank">Godfried Toussaint</a>. The clarity of these diagrams inspired me to recreate them for musical tunings, which also exhibit periodicity. Here’s the result, using Mike Bostock’s excellent Observable platform. You can click the notes to hear them:</p>
+
+<iframe width="100%" height="700" frameborder="0" style="background:#bbb;" src="https://observablehq.com/embed/@infojunkie/tuning-diagram?cell=chart"></iframe>
+
+<h2 id="a-quick-introduction-to-the-mathematics-of-tuning"><a class="header" href="#a-quick-introduction-to-the-mathematics-of-tuning">A quick introduction to the mathematics of tuning</a></h2>
+
+<p>The mathematics of tuning are quite simple, once the historical details are abstracted. Essentially, the problem that musicians face is to choose satisfactory intervals for their scales, that are a) pleasing to the ear, b) flexible enough to express the various emotions/meanings that they want to convey, and c) feasible on their instruments. Musical cultures and scholars have solved this problem in different ways over the ages, but some features are largely invariant and constitute the building blocks of most scales, because of the psychoacoustic features of human perception.</p>
+
+<p>Musical pitches (notes) are specific frequencies of sound waves. Regardless of specific frequency, though, the human ear perceives <strong>ratios</strong> of frequencies (called <em>intervals</em>) as meaningful: given a note played at frequency <em>f</em>, the human ear will perceive another note at frequency <em>2f</em> as being equivalent in quality (called <em>chroma</em>) albeit of higher pitch. The ratio 2:1 is called the <em>octave</em> and constitutes the first invariant when building up a scale. Another significant ratio is the <em>perfect fifth</em> (ratio 3:2) which most musical cultures use as a point of tension in the melodic development, which tends to eventually resolve to the root <em>tonic</em> note.</p>
+
+<p>From these humble beginnings, the puzzle of building up a scale is then to populate the interval 2:1 with many more notes that enrich the possibilities of musical expression. I refer the interested reader to the book above for an in-depth exposition, or indeed the multitude of online resources devoted to this subject (starting of course with the <a href="https://en.wikipedia.org/wiki/Music_and_mathematics" rel="noopener noreferrer" target="_blank">relevant Wikipedia article</a>).</p>
+
+<p>In the tuning diagram above, the circle represents a single octave, on which the intervals of various tunings are laid out according to their ratios. For example, the modern Western 12-tet temperament is made up of 12 equal intervals, each equal to the 12th root of 2 (i.e. <span class="nowrap"><sup style="margin-right: -0.5em; vertical-align: 0.8em;">12</sup>√<span style="border-top:1px solid; padding:0 0.1em;">2</span></span>) which yields a perfect octave (<span class="nowrap">2<sup>​<sup>12</sup>⁄<sub>12</sub></sup></span> = 2), and an acceptably approximate fifth (within the <a href="https://en.wikipedia.org/wiki/Just-noticeable_difference#Music_production_applications" rel="noopener noreferrer" target="_blank">psychoacoustic limits of human perception</a>).</p>
+
+<h2 id="future-work"><a class="header" href="#future-work">Future work</a></h2>
+
+<p>I have encapsulated and enhanced the tuning logic of my Web Audio experiment into <a href="https://github.com/infojunkie/scalextric" rel="noopener noreferrer" target="_blank">a JavaScript library</a> which can be reused in Web applications. The plan is to use this library in my ongoing project to create a musician’s online notebook, which will allow for musical scores to be annotated and manipulated to enhance one’s understanding and expressive possibilities.</p>
+
+  </div>
+
+  
+
+  
+    
+<script data-isso="https://blog.karimratib.me/isso" src="https://blog.karimratib.me/isso/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+
+  
+</article>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">infojunkie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>
+            <a href="/assets/CV-KarimRATIB.pdf">
+              my resume
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/infojunkie/blog" rel="noopener noreferrer" target="_blank">
+              blog source
+            </a>
+          </li>
+        </ul>
+
+        <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
+
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          <li>
+            <a href="https://thereisamoduleforthat.com" rel="noopener noreferrer" target="_blank">
+              <img src="/assets/tmft.svg">
+              There's a module for that!
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/infojunkie" rel="noopener noreferrer" target="_blank">
+              <svg class="icon"><use xlink:href='#fab.fa-github'></use></svg>
+              GitHub
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@KarimRatib" rel="noopener noreferrer" target="_blank">
+              <svg class="icon"><use xlink:href='#fab.fa-youtube'></use></svg>
+              YouTube
+            </a>
+          </li>
+          <li>
+            <a href="https://musescore.com/infojunkie" rel="noopener noreferrer" target="_blank">
+              <svg class="icon"><use xlink:href='#fas.fa-music'></use></svg>
+              Musescore
+            </a>
+          </li>
+          <li>
+            <a href="mailto:karim.ratib@gmail.com">
+              <svg class="icon"><use xlink:href='#far.fa-envelope'></use></svg>
+              email
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    </div>
+
+  </div>
+
+  <svg display="none" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <defs>
+                  <!--
+                  Font Awesome Free 5.5.0 by @fontawesome - https://fontawesome.com
+                  License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+                  -->
+              <symbol id='fab.fa-github' viewBox='0 0 496 512'>
+            <title>github</title>
+            <path class='path1' d='M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z'></path>
+        </symbol>
+        <symbol id='fab.fa-youtube' viewBox='0 0 576 512'>
+            <title>youtube</title>
+            <path class='path1' d='M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z'></path>
+        </symbol>
+        <symbol id='fas.fa-music' viewBox='0 0 512 512'>
+            <title>music</title>
+            <path class='path1' d='M499.1 6.3c8.1 6 12.9 15.6 12.9 25.7v72V368c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V147L192 223.8V432c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V200 128c0-14.1 9.3-26.6 22.8-30.7l320-96c9.7-2.9 20.2-1.1 28.3 5z'></path>
+        </symbol>
+        <symbol id='far.fa-envelope' viewBox='0 0 512 512'>
+            <title>envelope</title>
+            <path class='path1' d='M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z'></path>
+        </symbol>
+        </defs>
+              </svg>
+
+</footer>
+
+
+  </body>
+
+</html>

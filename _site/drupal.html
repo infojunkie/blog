@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <style>
+    .no-js {
+      visibility: visible !important;
+    }
+  </style>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>drupal</title>
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="https://blog.karimratib.me/drupal.html">
+  <link rel="alternate" type="application/rss+xml" title="infojunkie" href="/feed.xml">
+
+  <link rel="shortcut icon" href="/favicon.ico">
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.4.0"></script>
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>drupal | infojunkie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="drupal" />
+<meta name="author" content="Karim Ratib" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="https://blog.karimratib.me/drupal.html" />
+<meta property="og:url" content="https://blog.karimratib.me/drupal.html" />
+<meta property="og:site_name" content="infojunkie" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="drupal" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Karim Ratib"},"headline":"drupal","url":"https://blog.karimratib.me/drupal.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+  <body style="visibility: hidden;" class="no-js">
+    <script>
+      // FOUC handling
+      // https://www.primative.net/blog/how-to-get-rid-of-the-flash-of-unstyled-content/
+      const domReady = (cb) => {
+        document.readyState === 'interactive' || document.readyState === 'complete'
+          ? cb()
+          : document.addEventListener('DOMContentLoaded', cb);
+      };
+      domReady(() => {
+        // Display body when DOM is loaded
+        document.body.style.visibility = 'visible';
+      });
+
+      // If JS is disabled, "no-js" class causes body to be visible from the beginning.
+      // If JS is enabled, remove the "no-js" class will force-hide the body until the above kicks in.
+      document.querySelector('body').classList.remove('no-js');
+    </script>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" href="/">
+      
+        infojunkie
+      
+    </a>
+
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+            <a class="page-link" href="/about/">about</a>
+            
+          
+            
+            
+            <a class="page-link" href="/drupal.html">drupal</a>
+            
+          
+            
+            
+            <a class="page-link" href="/demos/">music</a>
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="category">
+
+  <header class="post-header">
+    <h1 class="post-title">drupal</h1>
+  </header>
+
+  
+
+
+  <ul class="post-list">
+      <li>
+        
+        <span class="post-meta">Aug 29, 2024</span>
+
+        <h2>
+          <a class="post-link" href="/2024/08/29/drupal-bigpipe-reset.html">Drupal 9/10: Fix Views Reset button with Big Pipe</a>
+        </h2>
+
+        <p>I was <strong>flabbergasted</strong> to discover that Big Pipe breaks the Views Reset button. In fact, Big Pipe breaks <strong>all</strong> form redirects. Not sure how other Drupal devs feel about that, but this was a big smh moment for me. Just imagine the collective time wasted debugging one’s code until one...
+      </p>
+</li>
+    
+      <li>
+        
+        <span class="post-meta">Aug 20, 2024</span>
+
+        <h2>
+          <a class="post-link" href="/2024/08/20/drupal-sessions.html">Drupal 10: From cookies to user sessions</a>
+        </h2>
+
+        <p>When you need to examine user session tokens, you know you’re deep in the bowels of the CMS. That’s what happened to me recently, as I was debugging why CloudFlare was mixing up user sessions and giving admin access to otherwise unpermissioned users <img class="emoji" title=":scream:" alt=":scream:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f631.png" height="20" width="20"></p> <p>To help debug this, I needed...
+      </p>
+</li>
+    
+      <li>
+        
+        <span class="post-meta">Oct 25, 2023</span>
+
+        <h2>
+          <a class="post-link" href="/2023/10/25/xdebug.html">Drupal 9: Troubleshooting Cache API issues, Part 1: Xdebug, wodby/drupal, VS Code</a>
+        </h2>
+
+        <p>In my 30+ years of programming, my go-to debugging tool has been the judicious usage of <code class="language-plaintext highlighter-rouge">print</code> commands on the appropriate variables at the appropriate times. Of course, <code class="language-plaintext highlighter-rouge">print</code> takes many different forms depending on the technology stack and the application model, but the principle remains...
+      </p>
+</li>
+    
+      <li>
+        
+        <span class="post-meta">Jun 1, 2023</span>
+
+        <h2>
+          <a class="post-link" href="/2023/06/01/backup-migrate-drush.html">Drupal 9: Backup and Migrate - Drush 11 support</a>
+        </h2>
+
+        <p>Supporting content migrations across stages is a tricky subject, and most tools I reviewed seemed too fragile or too complex to be delivered to a client. We opted to use a simple workflow based on <a href="https://www.drupal.org/project/backup_migrate" rel="noopener noreferrer" target="_blank">BAM (Backup and Migrate)</a> coupled with config re-synchronization. To help automate...
+      </p>
+</li>
+    
+      <li>
+        
+        <span class="post-meta">May 1, 2023</span>
+
+        <h2>
+          <a class="post-link" href="/2023/05/01/google-charts-tabs.html">Drupal 9: Fixing Google Charts rendering in tabbed pages</a>
+        </h2>
+
+        <p>Google Charts has a <a href="https://stackoverflow.com/search?q=google+charts+hidden" rel="noopener noreferrer" target="_blank">long-standing, known issue rendering correctly in hidden divs</a>. This caused us much head scratching and debugging hours before we even landed on the correct diagnosis: a chart that renders correctly on the <a href="https://git.drupalcode.org/project/charts/-/tree/5.0.x/modules/charts_api_example" rel="noopener noreferrer" target="_blank">Charts API Example page</a> does not...
+      </p>
+</li>
+    
+      <li>
+        
+        <span class="post-meta">Apr 1, 2023</span>
+
+        <h2>
+          <a class="post-link" href="/2023/04/01/backup-migrate-postgresql.html">Drupal 9: Backup and Migrate - PostgreSQL support</a>
+        </h2>
+
+        <p>I was suprised this hadn’t been already done, so I <a href="https://www.drupal.org/project/backup_migrate/issues/2930369" rel="noopener noreferrer" target="_blank">added PostgreSQL support to the venerable Backup and Migrate (BAM) module</a>. Instead of previous patches that implemented SQL generation and parsing manually, I opted for the much simpler and (imho) more robust approach of invoking the...
+      </p>
+</li>
+    
+      <li>
+        
+        <span class="post-meta">Mar 1, 2023</span>
+
+        <h2>
+          <a class="post-link" href="/2023/03/01/export-link.html">Drupal 9: Showing an export link for each manually updated config item</a>
+        </h2>
+
+        <p>The <a href="https://www.drupal.org/docs/drupal-apis/configuration-api" rel="noopener noreferrer" target="_blank">Configuration API</a> is by far the best surprise I got about Drupal 9. Finally, a core system that is robust enough to hold any configuration set reliably, and extensible enough for contrib modules. Back in Drupal 7, maintaining a consistent configuration across stages had been...
+      </p>
+</li>
+    
+      <li>
+        
+        <span class="post-meta">Feb 1, 2023</span>
+
+        <h2>
+          <a class="post-link" href="/2023/02/01/still-drupal.html">Still Drupal after all these years</a>
+        </h2>
+
+        <p>I thought I was done with Drupal in 2016 when we rebuilt <a href="https://github.com/meedan/check" rel="noopener noreferrer" target="_blank">Meedan’s fact-checking platform, Check</a>, using Ruby / React. It felt like a breath of fresh air to decouple the frontend from the backend, and further subdivide the application into a set of services that...
+      </p>
+</li>
+    
+  </ul>
+
+</div>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">infojunkie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>
+            <a href="/assets/CV-KarimRATIB.pdf">
+              my resume
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/infojunkie/blog" rel="noopener noreferrer" target="_blank">
+              blog source
+            </a>
+          </li>
+        </ul>
+
+        <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
+
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          <li>
+            <a href="https://thereisamoduleforthat.com" rel="noopener noreferrer" target="_blank">
+              <img src="/assets/tmft.svg">
+              There's a module for that!
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/infojunkie" rel="noopener noreferrer" target="_blank">
+              <svg class="icon"><use xlink:href="#fab.fa-github"></use></svg>
+              GitHub
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@KarimRatib" rel="noopener noreferrer" target="_blank">
+              <svg class="icon"><use xlink:href="#fab.fa-youtube"></use></svg>
+              YouTube
+            </a>
+          </li>
+          <li>
+            <a href="https://musescore.com/infojunkie" rel="noopener noreferrer" target="_blank">
+              <svg class="icon"><use xlink:href="#fas.fa-music"></use></svg>
+              Musescore
+            </a>
+          </li>
+          <li>
+            <a href="mailto:karim.ratib@gmail.com">
+              <svg class="icon"><use xlink:href="#far.fa-envelope"></use></svg>
+              email
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"></a><br>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    </div>
+
+  </div>
+
+  <svg display="none" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <defs>
+                  <!--
+                  Font Awesome Free 5.5.0 by @fontawesome - https://fontawesome.com
+                  License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+                  -->
+              <symbol id="fab.fa-github" viewbox="0 0 496 512">
+            <title>github</title>
+            <path class="path1" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path>
+        </symbol>
+        <symbol id="fab.fa-youtube" viewbox="0 0 576 512">
+            <title>youtube</title>
+            <path class="path1" d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"></path>
+        </symbol>
+        <symbol id="fas.fa-music" viewbox="0 0 512 512">
+            <title>music</title>
+            <path class="path1" d="M499.1 6.3c8.1 6 12.9 15.6 12.9 25.7v72V368c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V147L192 223.8V432c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V200 128c0-14.1 9.3-26.6 22.8-30.7l320-96c9.7-2.9 20.2-1.1 28.3 5z"></path>
+        </symbol>
+        <symbol id="far.fa-envelope" viewbox="0 0 512 512">
+            <title>envelope</title>
+            <path class="path1" d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z"></path>
+        </symbol>
+        </defs>
+              </svg>
+
+</footer>
+
+
+  </body>
+
+</html>
