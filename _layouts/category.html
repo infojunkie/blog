@@ -11,7 +11,7 @@ layout: default
   {{ content }}
 
   <ul class="post-list">
-    {%- assign posts = site.posts | where_exp: "post", "post.category == 'drupal'" -%}
+    {%- assign posts = site.posts | where_exp: "post", "post.category == page.category" -%}
     {% for post in posts %}
       <li>
         {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
@@ -21,7 +21,7 @@ layout: default
           <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
         </h2>
 
-        {{ post.excerpt | unchangelogify | extlinks | truncatewords: 50 }}
+        {{ post.description | default: post.excerpt | unchangelogify | extlinks | truncatewords: 50 }}
       </li>
     {% endfor %}
   </ul>

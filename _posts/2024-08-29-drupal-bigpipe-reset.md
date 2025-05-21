@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Drupal 9/10: Fix Views Reset button with Big Pipe"
+title: "Drupal 10: Fix Views Reset button with Big Pipe"
 date: 2024-08-29
 category: drupal
 description: Big Pipe on Drupal 9+ breaks form redirects. In this post, I explain how I fixed it for a specific but common case.
