@@ -19,6 +19,10 @@ layout: default
     {{ content | extlinks }}
   </div>
 
+  {% if page.category == 'drupal' %}
+    {% include tmft.html %}
+  {% endif %}
+
   {% if site.isso.path %}
     {% include isso.html %}
   {% endif %}
