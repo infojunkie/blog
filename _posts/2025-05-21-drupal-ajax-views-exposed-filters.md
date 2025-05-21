@@ -6,7 +6,7 @@ category: drupal
 description: Enabling AJAX callbacks on Views exposed forms causes a cryptic error that "the uploaded file likely exceeded the maximum file size". In this post, I explain why this happens, and present a functioning workaround.
 image: /assets/what-me-entitled.jpg
 ---
-I don't mind fixing the bugs that I or my team introduce into our codebase - those bugs are expected and par for the course. But bugs in Drupal core are totally unacceptable!!
+I don't mind fixing the bugs that I or my team introduce into our codebase - those bugs are expected and par for the course. But bugs in Drupal core are totally unacceptable!! /s
 
 {% include image.html url="/assets/what-me-entitled.jpg" width="100%" description="In reality, these blog posts are just excuses for me to make more silly memes." %}
 
