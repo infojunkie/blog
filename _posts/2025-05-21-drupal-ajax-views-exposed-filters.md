@@ -76,3 +76,5 @@ In this particular case, the error that Drupal reports is not only useless, it i
 - **DevOps**: Should system engineers see an error, a warning, or should the system keep functioning silently? What information will best help system engineers to manage the site's operation?
 
 The detail about the `URL` options being overridden by an undocumented `['#ajax']['options']` key illustrates the difficulty of keeping documentation in sync with the code, but also illustrates the importance of thinking about DX when designing APIs, to minimize surprises and inconsistencies which directly translate to bugs or wasted effort.
+
+In the spirit of contributing something back, I [added to my workaround to the original issue](https://www.drupal.org/project/drupal/issues/2658718#comment-160997), hoping it will help someone and thereby entangling me to the issue's fate!
