@@ -46,7 +46,7 @@ function my_module_form_views_exposed_form_alter(&$form, FormStateInterface $for
     ];
 }
 ```
-If only things were that simple! This did not work - the AJAX request kept missing ALL query arguments after this change. How on earth could `URL` options get ignored?? More hours, more digging revealed [this code deep inside `RenderElementBase::preRenderAjaxForm`](https://git.drupalcode.org/project/drupal/-/blob/10.5.x/core/lib/Drupal/Core/Render/Element/RenderElementBase.php#L381-388) - someone decided to overwrite the incoming URL options with those from another key THAT IS NOT EVEN DOCUMENTED :angry: I'm sure it seemed like a good idea at the time :angel:
+If only things were that simple! This did not work - the AJAX request kept missing ALL query arguments after this change. How on earth could `URL` options get ignored?? More hours, more digging revealed [this code deep inside `RenderElementBase::preRenderAjaxForm`](https://git.drupalcode.org/project/drupal/-/blob/10.5.x/core/lib/Drupal/Core/Render/Element/RenderElementBase.php#L381-388) - someone decided to overwrite the incoming URL options with those from another key THAT IS NOT EVEN DOCUMENTED :angry: - I'm sure it seemed like a good idea at the time and I've edited the documentation to reflect this quirk :angel:
 
 So the final code looks like:
 ```php
@@ -77,4 +77,4 @@ In this particular case, the error that Drupal reports is not only useless, it i
 
 The detail about the `URL` options being overridden by an undocumented `['#ajax']['options']` key not only illustrates the difficulty of keeping documentation in sync with the code, but also the importance of thinking about DX when designing APIs, to minimize surprises and inconsistencies which directly translate to bugs or wasted effort.
 
-In the spirit of contributing back, I [documented my workaround in the original issue](https://www.drupal.org/project/drupal/issues/2658718#comment-16099799), hoping it will help someone and thereby entangling me to the issue's fate!
+In the spirit of contributing back, I [documented my workaround in the original issue](https://www.drupal.org/project/drupal/issues/2658718#comment-16099799) and updated the AJAX Forms documentation accordingly - hoping it will prevent further unnecessary hair pulling!
