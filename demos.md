@@ -15,13 +15,9 @@ Here are some music demos that I am proud-ish to exhibit. Click a screenshot to 
 
     {% include demo.html url="/musicxml/" image="musicxml-schema" alt="MusicXML Schema" title="A one-page rendition of the MusicXML schema implemented using an XSD-to-HTML transformation script, itself written in XSL." %}
 
-    {% include demo.html url="https://blog.karimratib.me/demos/sheetdex/" image="sheetdex" alt="Sheetdex" title="A sheet music index created from various online sources." %}
-
     {% include demo.html url="https://observablehq.com/@infojunkie/rhythm-diagram" image="rhythm-diagram" alt="Rhythm Diagram" title="An Observable notebook to visualize rhythms as circular diagrams." %}
 
     {% include demo.html url="https://observablehq.com/@infojunkie/tuning-diagram" image="tuning-diagram" alt="Tuning Diagram" title="An Observable notebook to visualize tunings as circular diagrams." %}
-
-    {% include demo.html url="https://blog.karimratib.me/demos/sheetplayer/" image="sheet-player" alt="Sheet Player" title="An early demo using Web Audio, Web MIDI and music engraving to create playable sheet music. Includes non-Western tunings as a bonus!" %}
 
 </div>
 
