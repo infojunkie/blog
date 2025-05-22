@@ -2,3 +2,4 @@
 .jekyll-*
 .env
 _site
+comments.db
