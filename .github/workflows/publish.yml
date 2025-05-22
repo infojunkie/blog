@@ -18,4 +18,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
-        script: cd ~/src/blog && source ~/.rvm/scripts/rvm && rvm use ruby-3.3.3 && ./build.sh
+        script: cd ~/src/blog && ./build.sh
