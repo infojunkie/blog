@@ -27,7 +27,7 @@ The displayed error has absolutely nothing to do with the situation I was facing
         throw new BrokenPostRequestException($this->getFileUploadMaxSize());
     }
 ```
-I don't know about you, but to me the condition of a missing `form_id` seems unrelated to a file limit issue. By examining the AJAX `GET` request in the browser, I was able to verify that no `form_id` query argument is actually sent - which means that further down this function, the form builder will be unable to find the form object that should be built. Looks like a legitimate error and the AJAX frontend seems be be at fault.
+I don't know about you, but to me the condition of a missing `form_id` seems unrelated to a file limit issue. By examining the AJAX `GET` request in the browser, I was able to verify that no `form_id` query argument is actually sent - which means that further down this function, the form builder will be unable to find the form object that should be built. Looks like a legitimate error and the AJAX frontend seems to be at fault.
 
 ## The workaround needed a workaround
 At this point, I had the choice of debugging and fixing the [Drupal AJAX frontend code](https://git.drupalcode.org/project/drupal/-/blob/10.5.x/core/misc/ajax.js), or find a workaround that would allow me to keep working on my business feature. Although I am a firm believer that we should allocate some of our professional time to contribute to the open source software that we use, this seemed a deeper dive than I could afford at that point. Instead, I opted for the most generic workaround that I could reuse in similar future scenarios. Here's what I came with:
