@@ -11,7 +11,7 @@ source "https://rubygems.org"
 gem "jekyll", "4.3.3"
 
 # This is the default theme for new Jekyll sites. You may change this to anything you like.
-gem "minima", :git => "https://github.com/jekyll/minima"
+gem "minima", github: "jekyll/minima", ref: "1e8a445"
 
 gem "kramdown-parser-gfm"
 
