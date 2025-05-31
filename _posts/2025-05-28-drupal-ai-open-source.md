@@ -54,6 +54,11 @@ COPY --from=pgvector-builder /usr/local/lib/postgresql/bitcode/vector.index.bc /
 COPY --from=pgvector-builder /usr/local/lib/postgresql/vector.so /usr/local/lib/postgresql/vector.so
 COPY --from=pgvector-builder /usr/local/share/postgresql/extension /usr/local/share/postgresql/extension
 ```
+You are now ready to download the embedding model:
+```bash
+docker-compose run ollama
+docker-compose exec ollama ollama pull mxbai-embed-large:latest # in a different console
+```
 ## Drupal modules setup
 Here is the relevant configuration in my `composer.json` file:
 ```json
