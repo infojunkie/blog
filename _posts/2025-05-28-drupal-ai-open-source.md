@@ -3,7 +3,7 @@ layout: post
 title: "Drupal 10: Fully local, open source Drupal AI setup, part 1: Search API"
 date: 2025-05-28
 category: drupal
-description: I describe a Drupal AI setup based on open source tools and running locally. The use case is to provide search results based on natural language queries using the Search API ecosystem. The constraint is to avoid communicating with external APIs and rely only on services that are co-located with the Drupal deplloyment.
+description: I describe a Drupal AI setup based on open source tools and running locally. The use case is to provide search results based on natural language queries using the Search API ecosystem. The constraint is to avoid communicating with external APIs and rely only on services that are co-located with the Drupal deployment.
 image: /assets/drupal-ai-search-api-workflow.png
 ---
 A recent interaction on the [Drupal community's Slack](https://drupal.slack.com) prompted me to describe the work I've been doing to create a fully local, open source setup for Drupal AI tools. My use case is to provide relevant search results based on natural language (English) queries. There are deployment scenarios, such as government projects, where the full system needs to be deployed in the home country and to avoid communicating with API services located elsewhere - this is the scenario that interests me here. Since I received positive feedback on my system description, I thought I'd clean it up and share it here. Hope it helps someone!
