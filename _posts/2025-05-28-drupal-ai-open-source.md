@@ -54,7 +54,7 @@ COPY --from=pgvector-builder /usr/local/lib/postgresql/bitcode/vector.index.bc /
 COPY --from=pgvector-builder /usr/local/lib/postgresql/vector.so /usr/local/lib/postgresql/vector.so
 COPY --from=pgvector-builder /usr/local/share/postgresql/extension /usr/local/share/postgresql/extension
 ```
-You are now ready to download the embedding model:
+We are now ready to download the embedding model:
 ```bash
 docker-compose run ollama
 docker-compose exec ollama ollama pull mxbai-embed-large:latest # in a different console
@@ -135,7 +135,10 @@ The tricky bit here is understanding the **Indexing option** setting - namely, t
 :warning: A word of caution: This is probably the part that requires the most tweaking to get good search results!!
 
 ## Results
-Once you've indexed the content in the index above, you're ready to test the search at **/admin/config/ai/explorers/vector_db_generator**:
+
+#### /admin/config/ai/explorers/vector_db_generator
+
+Once we've indexed the content in the index above, we're ready to test the search:
 
 {% include image.html url="/assets/drupal-ai-vector-db-generator.png" width="100%" description="The Vector DB Explorer is useful to test your Drupal AI + Search API configuration." %}
 
