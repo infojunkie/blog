@@ -144,6 +144,6 @@ Once we've indexed the content in the index above, we're ready to test the searc
 
 In case you're curious, here's the database table that the Search API server creates to store vector embeddings. You can notice that each node is broken up in several chunks, each starting with the node title which was selected as one of the **Contextual** fields above:
 
-{% include image.html url="/assets/drupal-ai-vector-db.png" width="100%" description="The search_api_rag is database table contaning the vector embeddings for content chunks." %}
+{% include image.html url="/assets/drupal-ai-vector-db.png" width="100%" description="The search_api_rag table contains the vector embeddings for content chunks." %}
 
 This concludes part 1 of my Drupal AI setup. Next time, I'll look at more specialized Search API use case before getting into the treacherous waters of generated responses. Happy vibing :robot:
