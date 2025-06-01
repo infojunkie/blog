@@ -136,9 +136,9 @@ The tricky bit here is understanding the **Indexing option** setting - namely, t
 
 ## Results
 
-#### /admin/config/ai/explorers/vector_db_generator
-
 Once we've indexed the content in the index above, we're ready to test the search:
+
+#### /admin/config/ai/explorers/vector_db_generator
 
 {% include image.html url="/assets/drupal-ai-vector-db-generator.png" width="100%" description="The Vector DB Explorer is useful to test your Drupal AI + Search API configuration." %}
 
