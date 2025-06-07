@@ -3,7 +3,7 @@ layout: post
 title: "Drupal 10: Getting Config Ignore and Webform to play nice together"
 date: 2025-06-05
 category: drupal
-description: I describe a technique for ignoring some, not all, webform settings from config sync. This gives flexibility to business users to manage end-user-facing form labels without fully giving up on configuration management. Along the way, I solve a quirk in Config Ignore that prevents from hard-coding its own configuration in `settings.php`.
+description: I describe a technique for ignoring some, not all, webform settings from config sync. This gives flexibility to business users to manage end-user-facing form labels without fully giving up on configuration management. Along the way, I solve a quirk in Config Ignore that prevents from hard-coding its own configuration in settings.php.
 image: /assets/ignore-config-ignore.jpg
 ---
 In my role as Systems Architect, I devote a lot of effort to configuration management. In Drupal-land, this means making sure that the site's configuration synchronization runs smoothly and idempotently, across all deployment stages. We've been using a `drush`-based deployment sequence that has served us well across the many sites that we maintain. Here's the magic incantation:

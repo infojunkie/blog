@@ -21,7 +21,8 @@ layout: default
           <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
         </h2>
 
-        {{ post.description | default: post.excerpt | unchangelogify | extlinks | truncatewords: 50 }}
+        {%- assign excerpt = post.excerpt | unchangelogify | extlinks | truncatewords: 50 -%}
+        {{ post.description | extlinks | default: excerpt }}
       </li>
     {% endfor %}
   </ul>
