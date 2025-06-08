@@ -10,12 +10,12 @@ In my role as Systems Architect, I devote a lot of effort to configuration manag
 ```bash
 drush cr; drush updb -y; drush cim -y; drush deploy:hook -y; drush cr;
 ```
-This little sequence allows us to reliably update Drupal core, the site configuration and our own custom modules without running into dependency loops. [Drupal's Configuration API](https://www.drupal.org/docs/drupal-apis/configuration-api) is a very well-designed system that has greatly simplified this process since Drupal 8, expecially with its plugin-based architecture that allows contrib modules to fine-tune the process.
+This little sequence allows us to reliably update Drupal core, the site configuration and our own custom modules without running into dependency loops. [Drupal's Configuration API](https://www.drupal.org/docs/drupal-apis/configuration-api) is a very well-designed system that has greatly simplified this process since Drupal 8, especially with its plugin-based architecture that allows contrib modules to fine-tune the process.
 
 For us, the [Config Ignore contrib module](https://www.drupal.org/project/config_ignore) is invaluable because business users typically require control over _some aspects_ the site's configuration, typically when it comes to end-user-facing settings like labels and titles. By using Config Ignore's excellent support for wildcards, individual subkeys and exclusion operator, we have a powerful toolset to give business users what they need.
 
 ## Overriding `config_ignore.settings` in `settings.php`
-During development, it's common to want to override the official configuration with different settings. The usual approach is to use the `settings.local.php` file with a hard-coded `$config` entry - in our case `$config['config_ignore.settings']`. However, I quickly discovered that these overridden settings don't get picked up by Config Ignore! Here we go, a new debugging dive 🤿... It turns out that [the default Drupal config factory is only consulted if the `config_ignore.settings` entry is NOT present in the sync folder](https://git.drupalcode.org/project/config_ignore/-/blob/149db17d375e78ec79245d08a71a062953dbc8c3/src/EventSubscriber/ConfigIgnoreEventSubscriber.php#L141-155). I am pretty sure this is the opposite to the usual expectation, and I may submit an issue to discuss that. In the meantime, here's a small workaround that will pick up your overridden settings:
+During development, it's common to want to override the official configuration with different settings. The usual approach is to use the `settings.local.php` file with a hard-coded `$config` entry - in our case `$config['config_ignore.settings']`. However, I quickly discovered that these overridden settings don't get picked up by Config Ignore! Here we go, a new debugging dive 🤿... It turns out that [the default Drupal config factory is only consulted if the `config_ignore.settings` entry is NOT present in the sync folder](https://git.drupalcode.org/project/config_ignore/-/blob/149db17d375e78ec79245d08a71a062953dbc8c3/src/EventSubscriber/ConfigIgnoreEventSubscriber.php#L141-155). I am pretty sure this is the opposite of the usual expectation, and I may submit an issue to discuss that. In the meantime, here's a small workaround that will pick up your overridden settings:
 
 ```php
 // my_custom_module.module
@@ -31,7 +31,7 @@ function my_custom_module_config_ignore_ignored_alter(&$ignoreConfig) {
       $ignoreConfig = ConfigIgnoreConfig::fromConfig($override);
     }
     catch (\Throwable $e) {
-      \Drupal::logger('workbc')->error('Invalid value for config_ignore.settings override.');
+      \Drupal::logger('my_custom_module')->error('Invalid value for config_ignore.settings override. Ignoring.');
     }
   }
 }
@@ -139,19 +139,19 @@ elements: |-
     i_would_like_to_building_kitchen_cabinets:
       '#type': radios
       '#title': 'I like building kitchen cabinets.'
-      '#options': workbc_interests
+      '#options': options_interests
       '#category': Realistic
       '#required': true
     i_would_enjoy_laying_brick_or_tile:
       '#type': radios
       '#title': 'I would enjoy laying brick or tile.'
-      '#options': workbc_interests
+      '#options': options_interests
       '#category': Realistic
       '#required': true
     i_would_like_to_develop_a_new_medicine:
       '#type': radios
       '#title': 'I would like to develop a new medicine.'
-      '#options': workbc_interests
+      '#options': options_interests
       '#category': Investigative
       '#required': true
 [...]
@@ -172,7 +172,7 @@ third_party_settings:
     auto_save: true
     auto_save_time: 5000
     optimistic_locking: false
-  my_custom_module: # THiS IS NEW
+  my_custom_module: # THIS IS NEW
     i_would_like_to_building_kitchen_cabinets: 'I REALLY 💙 building kitchen cabinets.'
     i_would_enjoy_laying_brick_or_tile:
     i_would_like_to_develop_a_new_medicine: 'I would like to develop a new medicine and make 💰💰💰.'
@@ -195,19 +195,19 @@ elements: |-
     i_would_like_to_building_kitchen_cabinets:
       '#type': radios
       '#title': 'I like building kitchen cabinets.'
-      '#options': workbc_interests
+      '#options': options_interests
       '#category': Realistic
       '#required': true
     i_would_enjoy_laying_brick_or_tile:
       '#type': radios
       '#title': 'I would enjoy laying brick or tile.'
-      '#options': workbc_interests
+      '#options': options_interests
       '#category': Realistic
       '#required': true
     i_would_like_to_develop_a_new_medicine:
       '#type': radios
       '#title': 'I would like to develop a new medicine.'
-      '#options': workbc_interests
+      '#options': options_interests
       '#category': Investigative
       '#required': true
 ```
