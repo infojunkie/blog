@@ -3,6 +3,7 @@ layout: post
 title: "Drupal 9: Fixing Google Charts rendering in tabbed pages"
 date: 2023-05-01
 category: drupal
+description: In which I describe a fix to a long-standing bug with Google Charts rendering inside hidden divs. This bug affects charts that are rendered in Boostrap tabs that are not active.
 ---
 Google Charts has a [long-standing, known issue rendering correctly in hidden divs](https://stackoverflow.com/search?q=google+charts+hidden). This caused us much head scratching and debugging hours before we even landed on the correct diagnosis: a chart that renders correctly on the [Charts API Example page](https://git.drupalcode.org/project/charts/-/tree/5.0.x/modules/charts_api_example) does not work inside a tab! Oh, the joys of programming sometimes.
 

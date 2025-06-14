@@ -1,8 +1,9 @@
 ---
 layout: post
-title: "Drupal 9: Showing an export link for each manually updated config item"
+title: "Drupal 9: Showing an export link for each manually updated configuration item"
 date: 2023-03-01
 category: drupal
+description: In which I describe how to add an export link to each out-of-sync configuration item right on the main Configuration synchronization page.
 ---
 The [Configuration API](https://www.drupal.org/docs/drupal-apis/configuration-api) is by far the best surprise I got about Drupal 9. Finally, a core system that is robust enough to hold any configuration set reliably, and extensible enough for contrib modules. Back in Drupal 7, maintaining a consistent configuration across stages had been the bane of my existence, and I was delighted to find it was now a solved problem.
 

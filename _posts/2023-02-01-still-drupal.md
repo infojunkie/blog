@@ -3,6 +3,7 @@ layout: post
 title: Still Drupal after all these years
 date: 2023-02-01
 category: drupal
+description: In which I congratulate myself for getting back into Drupal development after many years away from the platform.
 ---
 I thought I was done with Drupal in 2016 when we rebuilt [Meedan's fact-checking platform, Check](https://github.com/meedan/check), using Ruby / React. It felt like a breath of fresh air to decouple the frontend from the backend, and further subdivide the application into a set of services that can be designed and maintained independently. Breaking the monolith was all the rage back then!
 

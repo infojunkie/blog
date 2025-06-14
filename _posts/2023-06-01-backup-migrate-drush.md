@@ -3,6 +3,7 @@ layout: post
 title: "Drupal 9: Backup and Migrate - Drush 11 support"
 date: 2023-06-01
 category: drupal
+description: In which I publish a small Drush 11 command for Backup and Migrate.
 ---
 Supporting content migrations across stages is a tricky subject, and most tools I reviewed seemed too fragile or too complex to be delivered to a client. We opted to use a simple workflow based on [BAM (Backup and Migrate)](https://www.drupal.org/project/backup_migrate) coupled with config re-synchronization. To help automate the process, I wrote a set of `drush` commands that implement BAM backup and restore. It's been tested extensively, but only with a specific set of sources and destinations, so I am reproducing the current code here until it gets published as a module. One design decision I made was to produce output as JSON, to make it easier for downstream automation.
 

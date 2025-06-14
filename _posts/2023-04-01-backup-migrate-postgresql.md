@@ -3,6 +3,7 @@ layout: post
 title: "Drupal 9: Backup and Migrate - PostgreSQL support"
 date: 2023-04-01
 category: drupal
+description: In which I describe a simple and robust approach to support PostgreSQL with Backup and Migrate module.
 ---
 I was suprised this hadn't been already done, so I [added PostgreSQL support to the venerable Backup and Migrate (BAM) module](https://www.drupal.org/project/backup_migrate/issues/2930369). Instead of previous patches that implemented SQL generation and parsing manually, I opted for the much simpler and (imho) more robust approach of invoking the standard tools `pg_dump` and `pgsql` for the backup and restore operations. It took me less than a day to get that patch working, and we've been using it daily on this project for the past 8 months, so I have good confidence it is production-ready.
 
