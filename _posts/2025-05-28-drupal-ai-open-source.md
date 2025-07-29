@@ -37,8 +37,8 @@ services:
 ```dockerfile
 # pgvector.Dockerfile
 ARG POSTGRES_TAG
-ARG PGVECTOR_TAG
 FROM wodby/postgres:${POSTGRES_TAG} AS pgvector-builder
+ARG PGVECTOR_TAG
 RUN apk add git
 RUN apk add build-base
 RUN apk add clang
