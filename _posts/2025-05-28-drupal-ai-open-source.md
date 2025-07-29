@@ -6,6 +6,8 @@ category: drupal
 description: I describe a Drupal AI setup based on open source tools and running locally. The use case is to provide search results based on natural language queries using the Search API ecosystem. The constraint is to avoid communicating with external APIs and rely only on services that are co-located with the Drupal deployment.
 image: /assets/drupal-ai-search-api-workflow.png
 ---
+{% include changelog.html changes="Jul 29, 2025 | Updated for the latest versions of the Drupal AI modules." %}
+
 A recent interaction on the [Drupal community's Slack](https://drupal.slack.com) prompted me to describe the work I've been doing to create a fully local, open source setup for Drupal AI tools. My use case is to provide relevant search results based on natural language (English) queries. There are deployment scenarios, such as government projects, where the full system needs to be deployed in the home country and to avoid communicating with API services located elsewhere - this is the scenario that interests me here. Since I received positive feedback on my system description, I thought I'd clean it up and share it here. Hope it helps someone!
 
 ## Theory of operation
@@ -64,49 +66,42 @@ Here is the relevant configuration in my `composer.json` file:
 ```json
 {
     "require": {
+        "drupal/ai": "^1.2@alpha",
         "drupal/ai_provider_ollama": "^1.1@beta",
         "drupal/ai_vdb_provider_postgres": "^1.0@alpha",
-    },
-    "extra": {
-         "patches": {
-            "drupal/ai_vdb_provider_postgres": {
-                "Add subquery alias to support older versions of Postgres": "patches/drupal/ai_vdb_provider_postgres/3526172-1.patch"
-            }
-        }
     }
 }
 ```
 and the enabled modules:
 ```
-wodby@php.container:/var/www/html $ drush pml | grep ai
-  AI                                            AI Core (ai)                                                                                  Enabled    1.1.0-beta1
-  AI Providers                                  DropAI Provider (dropai_provider)                                                             Disabled   1.1.0-beta1
-  AI                                            AI API Explorer (ai_api_explorer)                                                             Enabled    1.1.0-beta1
-  AI Tools                                      AI Assistant API (ai_assistant_api)                                                           Disabled   1.1.0-beta1
-  AI                                            AI Automators (ai_automators)                                                                 Disabled   1.1.0-beta1
-  AI Tools                                      AI Chatbot (ai_chatbot)                                                                       Disabled   1.1.0-beta1
-  AI                                            AI CKEditor integration (ai_ckeditor)                                                         Disabled   1.1.0-beta1
-  AI                                            AI Content Suggestions (ai_content_suggestions)                                               Disabled   1.1.0-beta1
-  AI                                            AI ECA integration (ai_eca)                                                                   Disabled   1.1.0-beta1
-  AI                                            AI External Moderation (ai_external_moderation)                                               Disabled   1.1.0-beta1
-  AI                                            AI Logging (ai_logging)                                                                       Disabled   1.1.0-beta1
-  AI (Experimental)                             AI Search (ai_search)                                                                         Enabled    1.1.0-beta1
-  AI                                            AI Translate (ai_translate)                                                                   Disabled   1.1.0-beta1
-  AI                                            AI Validations (ai_validations)                                                               Disabled   1.1.0-beta1
-  AI Providers                                  OpenAI Provider (provider_openai)                                                             Disabled   1.1.0-beta1
-  AI Providers                                  Ollama Provider (ai_provider_ollama)                                                          Enabled    1.1.0-beta1
-  AI Vector Database Providers (Experimental)   Postgres VDB Provider (ai_vdb_provider_postgres)                                              Enabled    1.0.0-alpha1
+wodby@php.container:/var/www/html $ drush pml | grep AI
+  AI                                            AI Core (ai)                                                                     Enabled    1.2.0-alpha1
+  AI Providers                                  DropAI Provider (dropai_provider)                                                Disabled   1.2.0-alpha1
+  AI                                            AI API Explorer (ai_api_explorer)                                                Enabled    1.2.0-alpha1
+  AI Tools                                      AI Assistant API (ai_assistant_api)                                              Disabled   1.2.0-alpha1
+  AI                                            AI Automators (ai_automators)                                                    Disabled   1.2.0-alpha1
+  AI Tools                                      AI Chatbot (ai_chatbot)                                                          Disabled   1.2.0-alpha1
+  AI                                            AI CKEditor integration (ai_ckeditor)                                            Disabled   1.2.0-alpha1
+  AI                                            AI Content Suggestions (ai_content_suggestions)                                  Disabled   1.2.0-alpha1
+  AI                                            AI ECA integration (ai_eca)                                                      Disabled   1.2.0-alpha1
+  AI                                            AI External Moderation (Deprecated) (ai_external_moderation)                     Disabled   1.2.0-alpha1
+  AI                                            AI Logging (ai_logging)                                                          Disabled   1.2.0-alpha1
+  AI (Experimental)                             AI Search (ai_search)                                                            Enabled    1.2.0-alpha1
+  AI                                            AI Translate (ai_translate)                                                      Disabled   1.2.0-alpha1
+  AI                                            AI Validations (ai_validations)                                                  Disabled   1.2.0-alpha1
+  AI Providers                                  Ollama Provider (ai_provider_ollama)                                             Enabled    1.1.0-beta2
+  AI Vector Database Providers (Experimental)   Postgres VDB Provider (ai_vdb_provider_postgres)                                 Enabled    1.0.0-alpha2
 ```
 ## Drupal AI setup
 With the infrastructure ready, it's now time to configure the Drupal AI components and wire them together. I'll be using the Admin UI with URIs and screenshots to better illustrate the setup.
 
-#### /admin/config/ai/settings
-
-{% include image.html url="/assets/drupal-ai-settings.png" width="100%" description="The only AI provider we need is the LLM for embeddings." %}
-
 #### /admin/config/ai/providers/ollama
 
 {% include image.html url="/assets/drupal-ai-providers-ollama.png" width="100%" description="Accessing the local Ollama service." %}
+
+#### /admin/config/ai/settings
+
+{% include image.html url="/assets/drupal-ai-settings.png" width="100%" description="The only AI provider we need is the LLM for embeddings." %}
 
 #### /admin/config/ai/vdb_providers/postgres
 
@@ -126,7 +121,7 @@ Note the **Vector Database Configuration > Collection** setting `search_api_rag`
 
 {% include image.html url="/assets/drupal-ai-search-api-index.png" width="100%" description="The Search API index settings." %}
 
-#### /admin/config/search/search-api/index/career_profiles_rag/processors
+#### /admin/config/search/search-api/index/career_profiles_rag/fields
 
 {% include image.html url="/assets/drupal-ai-search-api-fields.png" width="100%" description="The Search API index field settings." %}
 
