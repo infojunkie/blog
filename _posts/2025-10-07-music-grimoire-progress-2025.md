@@ -22,7 +22,7 @@ In 2025, I had entirely too much fun working on the Music Grimoire / `music-i18n
 ## A review of last year's goals
 Around the same time last year, I presented a [progress report of where I was with my music work]({% link _posts/2024-10-01-music-grimoire-progress-report.md %}). It ended with the following goals for this year:
 
-- _Embed playable music sheets into actual CMS systems, starting with my own Arabic Real Book sheets._ I did not work on this goal at all :cry: BUT! I did get involved in an exciting music publishing project that I will describe below.
+- _Embed playable music sheets into actual CMS systems, starting with my own Arabic Real Book sheets._ I did not work on this goal at all :cry: BUT! I did get involved in an exciting music publishing project that I will share below.
 
 - _Reach a milestone with `musicxml-mscx` to convert full music scores from MusicXML to MuseScore format._ I did reach a good milestone with this work. I focused on rendering style beyond what MusicXML affords, by accepting user-defined MuseScore stylesheets (`.mss`, which can be created from within MuseScore's style settings) in the conversion process. For example, this module can now produce stylized MuseScore lead sheets like the following:
 
