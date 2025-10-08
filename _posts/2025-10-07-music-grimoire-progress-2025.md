@@ -77,7 +77,7 @@ What is missing from Verovio to implement the microtonal features needed by Maqa
 ## What is a musical tuning?
 Whenever questions of musical tunings arise, the first place to check is the [incredible Scala application](https://www.huygens-fokker.org/scala/index.html), which is considered to be the reference implementation for all things microtonal. Scala [has defined the de-facto standard to describe tunings](https://www.huygens-fokker.org/scala/scl_format.html).
 
-A tuning defines how each note should be tuned (i.e. its pitch) relative to its base note. Because the tuning is relative, we're not using actual frequencies in Hertz but rather frequency ratios (for example, the octave ratio is 2/1 of the base note), or a logarithmic scale in unit called "cents" where 1200 cents correspond to one octave, and 1200/12 = 100 cents correspond to one semitone. Here's a Scala SCL file for the most common Arabic tuning, which in addition to the common 12 Western musical tones, includes 12 other tones tuned halfway between pairs of semitones (called quarter-tones):
+A tuning defines how each note should be tuned (i.e. its pitch) relative to some base note. Because the tuning is relative, we're not using actual frequencies in Hertz but rather frequency ratios (for example, the octave ratio is 2/1 of the base note), or a logarithmic scale in unit called "cents" where 1200 cents correspond to one octave, and 1200/12 = 100 cents correspond to one semitone. Here's a Scala SCL file for the most common Arabic tuning, which in addition to the common 12 Western musical tones, includes 12 other tones tuned halfway between pairs of semitones (called quarter-tones):
 
 ```
 ! 24-edo.scl
