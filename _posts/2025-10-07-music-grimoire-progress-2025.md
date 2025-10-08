@@ -6,7 +6,7 @@ category: music
 description: In this post, I present a summary of the work done last year on my music project. The focus has been on realizing the vision of <code>music-i18n</code> by creating a full microtonal pipeline from MusicXML to MIDI and Web playback.
 image: assets/musicxml-player-static.jpg
 ---
-In 2025, I had entirely too much fun working on the Music Grimoire / `music-i18n` project. After a few years of slow progress, my productivity shot through the roof this year! Without a doubt motivated by the interest that other members of the music coding community showed in the work, and the fruitful cooperations that ensued.
+In 2025, I had entirely too much fun working on the Music Grimoire / `music-i18n` project. After a few years of slow progress, my productivity shot through the roof this year! No doubt motivated by the interest that other members of the music coding community showed in the work, and the fruitful cooperations that ensued.
 
 ## Contents
 * [A review of last year's goals](#a-review-of-last-years-goals)
