@@ -286,7 +286,7 @@ The proverbial astute reader will have noticed that the `@ABL NOTE_NAMES` differ
 
 Once stored in Verovio's internal data store, the tuning is ready to be used during MIDI export. This happens in two steps:
 
-1. Export an MTS (MIDI Tuning Standard) message based on the tuning information above. For the curious reader, this is a [MIDI SysEx message](https://midi.org/midi-tuning-updated-specification) to which we pass the retuned frequencies of all 128 MIDI keys. The new frequencies are computed by `tuning-library`.
+1. Export an MTS (MIDI Tuning Standard) message based on the tuning information above. This is a [MIDI SysEx message](https://midi.org/midi-tuning-updated-specification) to which we pass the retuned frequencies of all 128 MIDI keys. The new frequencies are computed by `tuning-library`.
 
 2. With the MIDI tuning now in place, we need to find the MIDI key that corresponds to each note in the score. For this, we maintain a map between the incoming `@ABL NOTE_NAMES` and the tuning entries. Again, `tuning-library` knows how to map tuning entries to MIDI keys, so we output this result to the MIDI file, instead of the default MIDI key that would have been sent in the absence of a tuning.
 
