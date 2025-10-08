@@ -37,7 +37,7 @@ markdown: kramdown
 theme: minima
 plugins:
   - jekyll-feed
-  - jemoji
+  - jemoji # https://github.com/github/gemoji/blob/master/db/emoji.json
   - jekyll-seo-tag
   - jekyll-remote-include
 exclude:

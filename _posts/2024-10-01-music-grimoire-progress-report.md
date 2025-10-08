@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Music Grimoire: A progress report"
+title: "Music Grimoire: 2024 progress report"
 date: 2024-10-01
 category: music
 description: In this post, I present a summary of the music ecosystem I've been working on for the past 7 years.
