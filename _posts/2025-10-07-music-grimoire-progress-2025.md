@@ -187,36 +187,47 @@ Here's how the tuning looks when it's embedded in a MusicXML file:
         <play>
           <other-play type="tuning-ableton">
             <![CDATA[
-! blackwood_15.ascl
+! 24-edo.ascl
 !
-15-EDO with Easley Blackwood's Ups and Downs Notation adapted for MusicXML / MEI.
+24 equal divisions of an octave. 24 proportionally equal and equal sounding semitone intervals per octave.
 !
-15
+! default tuning: degree 18 (900.0 cents) 440 Hz, or degree 0 = 261.625565 Hz
 !
-80.
-160.
-240.
-320.
+24
+!
+50.
+100.
+150.
+200.
+250.
+300.
+350.
 400.
-480.
-560.
-640.
-720.
+450.
+500.
+550.
+600.
+650.
+700.
+750.
 800.
-880.
-960.
-1040.
-1120.
-1200.
+850.
+900.
+950.
+1000.
+1050.
+1100.
+1150.
+2/1
 !
-! Note names are formatted per MusicXML accidentals.
+! Note names are formatted per MEI accidentals.
 !
-! @ABL NOTE_NAMES B/C Cnatural-up/Dflat-up Csharp-down/Dnatural-down D/Eflat Dnatural-up/Eflat-up  ↩
-Dsharp-down/Enatural-down E/F Fnatural-up/Gflat-up Fsharp-down/Gnatural-down G/Aflat Gnatural-up/Aflat-up  ↩
-Gsharp-down/Anatural-down A/Bflat Anatural-up/Bflat-up Asharp-down/Bnatural-down
+! @ABL NOTE_NAMES Bsharp/C Cquarter-sharp Csharp/Dflat Dslash-flat D Dquarter-sharp Dsharp/Eflat Eslash-flat  ↩
+E/Fflat Equarter-sharp/Fslash-flat Esharp/F Fquarter-sharp Fsharp/Gflat Gslash-flat G Gquarter-sharp Gsharp/Aflat  ↩
+Aslash-flat A Aquarter-sharp Asharp/Bflat Bslash-flat B/Cflat Bquarter-sharp/Cslash-flat
 ! @ABL REFERENCE_PITCH 4 0 261.6256
-! @ABL SOURCE 15 equal temperament, Wikipedia.
-! @ABL LINK https://en.wikipedia.org/wiki/15_equal_temperament
+! @ABL NOTE_RANGE_BY_INDEX 0 21 6 4
+! @ABL LINK https://www.ableton.com/learn-more/tuning-systems/24-edo
             ]]>
             </other-play>
           </play>
